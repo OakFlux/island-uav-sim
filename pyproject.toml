@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "island-uav-sim"
+version = "0.1.0"
+description = "Discrete-event simulation and 2D playback of weather-constrained UAV inspection"
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [{name = "Jiaming Lu"}, {name = "Chih-Min Yu"}, {name = "Xiaojian Yuan"}, {name = "Guobin Liu"}]
+dependencies = []
+
+[project.scripts]
+island-uav = "island_uav.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+island_uav = ["data/*.csv", "data/*.json", "web/*", "web/**/*"]

@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#152b3c">
+  <title>Island UAV · Operations simulator</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2032%2032%22%3E%3Crect%20width%3D%2232%22%20height%3D%2232%22%20rx%3D%227%22%20fill%3D%22%23152b3c%22%2F%3E%3Cpath%20d%3D%22M6%2023h20M7%2020l7-7%206%205%205-3M11%208h10%22%20fill%3D%22none%22%20stroke%3D%22%23a6d4d5%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%2F%3E%3Ccircle%20cx%3D%229%22%20cy%3D%228%22%20r%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23a6d4d5%22%20stroke-width%3D%221.6%22%2F%3E%3Ccircle%20cx%3D%2223%22%20cy%3D%228%22%20r%3D%223%22%20fill%3D%22none%22%20stroke%3D%22%23a6d4d5%22%20stroke-width%3D%221.6%22%2F%3E%3C%2Fsvg%3E">
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Island UAV simulator home">
+      <span class="brand-symbol" aria-hidden="true"><svg viewBox="0 0 36 36"><path d="M4 25h28M6 21l8-7 6 5 5-3 5 5M13 8h10M18 5v6"/><circle cx="11" cy="8" r="3"/><circle cx="25" cy="8" r="3"/></svg></span>
+      <span><strong>ISLAND UAV</strong><small>Inspection operations simulator</small></span>
+    </a>
+    <div class="topbar-right"><span class="paper-label">WORKING PAPER</span><span class="connection"><i></i><span id="connection-text">Connecting</span></span><button id="configure-toggle" class="button ghost configure-toggle" aria-expanded="false" aria-controls="configuration">Configure</button></div>
+  </header>
+
+  <div class="workspace">
+    <aside class="configuration panel" id="configuration">
+      <div class="panel-heading"><span class="eyebrow">SCENARIO</span><h1>Pingtan Island</h1><p>Recurring infrastructure inspection</p></div>
+      <form id="config-form">
+        <label for="weather">Weather conditions</label>
+        <select id="weather" name="weather"><option value="synthetic">Alternating wind</option><option value="historical">Historical regional wind</option></select>
+        <div class="field-pair"><div><label for="fleet_size">Aircraft</label><select id="fleet_size" name="fleet_size"><option value="2">2 UAVs</option><option value="4" selected>4 UAVs</option><option value="8">8 UAVs</option></select></div><div><label for="targets_per_sortie">Sites / sortie</label><select id="targets_per_sortie" name="targets_per_sortie"><option value="1">1 site</option><option value="2" selected>2 sites</option></select></div></div>
+        <div class="field-pair"><div><label for="charge_ports">Charge ports</label><select id="charge_ports" name="charge_ports"><option value="1">1 port</option><option value="2" selected>2 ports</option></select></div><div><label for="port_input_w">Power / port</label><select id="port_input_w" name="port_input_w"><option value="120">120 W</option><option value="240" selected>240 W</option><option value="480">480 W</option></select></div></div>
+        <label for="policy">Dispatch policy</label><select id="policy" name="policy"><option value="B2">B2 · Limited lookahead</option><option value="B0">B0 · Priority based</option></select>
+        <label for="duration_hours">Operating horizon</label><select id="duration_hours" name="duration_hours"><option value="6" selected>6 hours</option><option value="12">12 hours</option><option value="24">24 hours</option></select>
+        <button class="button primary run-button" id="run-button" type="submit"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7 4 9 6-9 6z"/></svg><span>Run simulation</span></button>
+        <p id="run-error" class="run-error" role="alert" hidden></p>
+      </form>
+      <div class="scenario-note"><span class="eyebrow">INSPECTION REQUIREMENTS</span><div class="task-key"><span><i class="dot short"></i><strong>S</strong> Short RGB</span><span><i class="dot long"></i><strong>L</strong> Continuous RGB</span><span><i class="dot multi"></i><strong>M</strong> Multiview zoom</span></div><p>A complete inspection updates information. Interrupted steps may need to restart.</p></div>
+      <div class="sidebar-bottom"><span class="tiny-pill">2D · Single base · Heterogeneous fleet</span><button id="download-button" class="text-button" disabled>Download run data <span aria-hidden="true">↗</span></button></div>
+    </aside>
+
+    <main class="main-area">
+      <section class="metric-strip" aria-label="Current performance">
+        <div class="metric"><span>Completed inspections</span><strong id="metric-completed">—</strong><small>all required steps</small></div>
+        <div class="metric"><span>Current mean AoI</span><strong id="metric-age">—</strong><small>hours · lower is fresher</small></div>
+        <div class="metric"><span>Operating energy</span><strong id="metric-energy">—</strong><small>kWh consumed</small></div>
+        <div class="metric"><span>Charging / waiting</span><strong id="metric-charging">—</strong><small>aircraft at the base</small></div>
+      </section>
+      <section class="map-panel" aria-label="Inspection area and aircraft positions">
+        <canvas id="map" tabindex="0" aria-label="Interactive map of Pingtan inspection sites and UAV positions. Drag to pan, scroll to zoom, or use the arrow and plus or minus keys."></canvas>
+        <div class="map-topline"><div class="map-name"><span class="map-live-dot"></span><strong>Inspection area</strong><span id="map-site-count">24 sites</span></div><div class="wind-chip"><svg id="wind-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21V4m-6 6 6-6 6 6"/></svg><span id="wind-speed">— m/s</span><small>wind vector</small></div></div>
+        <div class="map-buttons" aria-label="Map controls"><button id="zoom-in" aria-label="Zoom in">+</button><button id="zoom-out" aria-label="Zoom out">−</button><button id="fit-map" aria-label="Fit inspection area"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7 3H3v4m10-4h4v4M3 13v4h4m6 0h4v-4"/></svg></button></div>
+        <div class="map-legend"><span><i class="base-key"></i> Shared base</span><span><i class="site-key"></i> Inspection site</span><span><i class="flight-key"></i> UAV track</span></div>
+        <div id="site-detail" class="site-detail" hidden><button id="close-site" aria-label="Close site details">×</button><span class="eyebrow" id="site-code">INSPECTION SITE</span><strong id="site-title"></strong><p id="site-description"></p><div id="site-status"></div></div>
+        <div class="map-scale"><span id="scale-label">2 km</span><i id="scale-bar"></i></div>
+        <div class="attribution"><span>Illustrative inspection assignments</span><span>Map data © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap contributors</a> · <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank" rel="noreferrer">ODbL</a></span></div>
+        <div class="loading-overlay" id="loading-overlay"><span class="spinner"></span><strong id="loading-message">Loading the inspection area</strong><span id="loading-hint">Preparing the operating scenario</span></div>
+        <div class="map-no-geography" id="map-no-geography" hidden>Geographic background unavailable. Inspection coordinates remain visible.</div>
+      </section>
+      <section class="playback" aria-label="Playback controls">
+        <div class="playback-row"><button id="play-button" class="play-button" aria-label="Play simulation" disabled><svg id="play-icon" viewBox="0 0 20 20" aria-hidden="true"><path d="m6 3 11 7-11 7z"/></svg></button><button id="reset-button" class="reset-button" aria-label="Reset to start" disabled><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 6a6 6 0 1 1-1 7M5 2v5H1"/></svg></button><div class="clock"><strong id="clock-current">00:00:00</strong><span>/ <span id="clock-end">06:00:00</span></span></div><span class="playback-label" id="playback-label">Simulation time</span><label class="speed-label" for="speed">Speed</label><select id="speed" aria-label="Playback speed"><option value="1">1×</option><option value="60">60×</option><option value="300" selected>300×</option><option value="900">900×</option></select></div>
+        <input id="timeline" type="range" min="0" max="21600" value="0" step="1" aria-label="Simulation time in seconds" disabled><div class="timeline-ticks" id="timeline-ticks"><span>00:00</span><span>01:30</span><span>03:00</span><span>04:30</span><span>06:00</span></div>
+      </section>
+    </main>
+
+    <aside class="operations panel" aria-label="Fleet and operating events">
+      <div class="fleet-heading"><div><span class="eyebrow">OPERATIONS</span><h2>Fleet status</h2></div><span id="fleet-active" class="fleet-count">— airborne</span></div>
+      <div id="fleet-list" class="fleet-list"><p class="empty-state">Loading aircraft…</p></div>
+      <section class="age-section"><div class="section-heading"><h2>Information freshness</h2><span>average age · h</span></div><canvas id="age-chart" role="img" aria-label="Current mean age of information over simulation time"></canvas></section>
+      <section class="event-section"><div class="section-heading"><h2>Event log</h2><span id="event-count">0 events</span></div><div id="event-log" class="event-log" aria-live="off"><p class="empty-state">Start playback to follow operations.</p></div></section>
+      <div class="operations-footer"><span id="run-status" class="status-neutral">Awaiting run</span><span>Event-based simulation</span></div>
+    </aside>
+  </div>
+</div>
+</body>
+</html>

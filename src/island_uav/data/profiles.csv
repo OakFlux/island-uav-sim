@@ -1,0 +1,3 @@
+profile_id,capabilities,battery_usable_wh,return_reserve_wh,max_airspeed_mps,max_groundspeed_mps,min_groundspeed_mps,max_flight_wind_mps,takeoff_w,cruise_w,inspection_base_w,hold_w,landing_w,ground_w,charge_intake_battery_w
+LGT,RGB,120,24,14,12,1,12,360,300,300,300,340,0,140
+GEN,RGB|ZOOM,210,42,16,14,1,14,510,440,425,425,480,0,210

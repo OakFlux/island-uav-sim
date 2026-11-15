@@ -1,0 +1,12 @@
+{
+  "scenario": "pingtan",
+  "fleet_size": 4,
+  "targets_per_sortie": 2,
+  "policy": "B2",
+  "charge_ports": 2,
+  "port_input_w": 240,
+  "duration_hours": 6,
+  "weather": "historical",
+  "historical_start_hour": 24,
+  "initial_age_mode": "paper"
+}

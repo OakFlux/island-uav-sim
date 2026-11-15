@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "Research software accompanying a working paper under submission."
+title: "Island UAV inspection simulation"
+type: software
+version: 0.1.0
+date-released: 2026-11-15
+authors:
+  - family-names: Lu
+    given-names: Jiaming
+  - family-names: Yu
+    given-names: Chih-Min
+  - family-names: Yuan
+    given-names: Xiaojian
+  - family-names: Liu
+    given-names: Guobin
+license: MIT

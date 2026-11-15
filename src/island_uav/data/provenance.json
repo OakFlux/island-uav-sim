@@ -1,0 +1,87 @@
+{
+  "schema": "island-uav-public-data-1",
+  "prepared_date": "2026-11-15",
+  "files": [
+    {
+      "file": "assets.csv",
+      "original_source": "data/study_v2/primary/scenarios/layouts/site/assets.csv",
+      "sha256": "a8c904b25d9757093cf7d2d2cf2e3bb0e1cd75c904778dcd573cab254f783b8f",
+      "transformation": "byte-identical copy"
+    },
+    {
+      "file": "legs.csv",
+      "original_source": "data/study_v2/primary/scenarios/layouts/site/undirected_legs.csv",
+      "sha256": "f17df83787850ebfa481f1dbf66a3288a31ab5f9072e7793acf0c0fa6fb69c80",
+      "transformation": "byte-identical copy"
+    },
+    {
+      "file": "bases.csv",
+      "original_source": "data/study_v2/primary/scenarios/bases.csv",
+      "sha256": "617e3fbab5379c78a68452e8f59b5097ac01c1f35579feeb7c2b7c2ce4d73c2c",
+      "transformation": "byte-identical copy"
+    },
+    {
+      "file": "profiles.csv",
+      "original_source": "data/study_v2/primary/scenarios/aircraft_profiles.csv",
+      "sha256": "64b93199bcd46ce1710f30d9dad24fcb2d5b2f18e71c57d608d7932878771c24",
+      "transformation": "byte-identical copy"
+    },
+    {
+      "file": "templates.csv",
+      "original_source": "data/study_v2/primary/scenarios/inspection_units.csv",
+      "sha256": "78f3176b14ec580ab1d182af12d691719968354998ec2115f1faa14bbc6aaef9",
+      "transformation": "byte-identical copy"
+    },
+    {
+      "file": "historical_wind.csv",
+      "original_source": "data/study_v2/primary/scenarios/weather/PT-20250404.csv",
+      "sha256": "759280b09e36ab2b01a7bbd2b63a6acca1fcf2b394a5f86b3246b7bc37b59f0c",
+      "transformation": "byte-identical copy"
+    },
+    {
+      "file": "demand_101.csv",
+      "original_source": "data/study_v2/primary/scenarios/layouts/site/demand_periodic_mixed_101.csv",
+      "sha256": "a50aaf086b32d1260c6918fcc314a9b7a423caf897f28e2cfc748dc11f3ce659",
+      "transformation": "byte-identical copy"
+    },
+    {
+      "file": "demand_202.csv",
+      "original_source": "data/study_v2/primary/scenarios/layouts/site/demand_periodic_mixed_202.csv",
+      "sha256": "8f92eb8c79a5e170da0b3056eac19047384fc30d6d0441f3133abe52139a01e3",
+      "transformation": "byte-identical copy"
+    },
+    {
+      "file": "demand_303.csv",
+      "original_source": "data/study_v2/primary/scenarios/layouts/site/demand_periodic_mixed_303.csv",
+      "sha256": "42db4a87fea77b623adf80a870574bb31dd291f302ceffbbc51cca371f3f8808",
+      "transformation": "byte-identical copy"
+    }
+  ],
+  "development_weather_source_sha256": {
+    "scenarios/weather/development/block_1.csv": "0d0f10ec9e19b283c64ee7b0026cc87e21aa2ef3eefa323987e846acb77dad7d",
+    "scenarios/weather/development/block_2.csv": "ec952ceef70d4820a70a0653b9ba18ddb292ea606bd1e2fab2603d4d1f70e309"
+  },
+  "core_sha256": {
+    "__init__.py": "573bbc781ce4e0c31f158401b86a71c994eee27b63a084a0dc2621787d5815b6",
+    "domain.py": "26708fdd626dd0eeef67f7ef332c5172991ab0c2842cbc2101da9fc9c7ac9481",
+    "physics.py": "e999998c1508234c481e665bc59408a5e33f35192a4671da620bf573d8cf8810",
+    "engine.py": "a5a8ad31cb7343d18aef09ec275300fe1d5f09453a55099a0e0079b0cc929b66",
+    "ledger.py": "015f8411366d1414a812e3218fed6527bc0252aa82fe8c756993ea2d1e6dae13",
+    "audit.py": "25a86ffd778a610ea226e414548e766ef38bccf1129fffdd8e4ebd03970ff18c",
+    "policies.py": "9fa93075320e395cc089fe9b3005abf92ea613f81b8270bf1ebf5549836946ff",
+    "inputs.py": "53ab83f102ff1d4fbf687fbe7c37a2e0b817a2f01585cdb0a42273eb52150040"
+  },
+  "historical_weather": {
+    "start_utc": "2025-04-04T00:00:00Z",
+    "hours": 97,
+    "source": "Open-Meteo/ECMWF ERA5 regional 10m wind proxy",
+    "license": "CC-BY-4.0",
+    "source_url": "https://open-meteo.com/en/docs/historical-weather-api"
+  },
+  "geography": {
+    "source": "OpenStreetMap contributors / Geofabrik Fujian extract, 2026-01-01 snapshot",
+    "license": "ODbL-1.0",
+    "source_url": "https://download.geofabrik.de/asia/china/fujian.html",
+    "note": "8 mapped anchors and 16 explicitly inferred stations; inspection procedures, demand and base are synthetic scenario assumptions."
+  }
+}

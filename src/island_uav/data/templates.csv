@@ -1,0 +1,6 @@
+template_id,unit_order,required_capability,duration_s,max_service_wind_mps,inspection_power_factor
+S,1,RGB,60,10,1.0
+L,1,RGB,240,8,1.05
+M,1,ZOOM,80,9,1.1
+M,2,ZOOM,80,9,1.1
+M,3,ZOOM,80,9,1.1
