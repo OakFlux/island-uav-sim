@@ -1,0 +1,2658 @@
+{
+  "schema_version": 1,
+  "scenario_id": "legacy-24-seed202",
+  "positions": {
+    "PTV2-01": {
+      "x_m": 778353.981,
+      "y_m": 2824110.074
+    },
+    "PTV2-02": {
+      "x_m": 772219.323,
+      "y_m": 2818959.258
+    },
+    "PTV2-03": {
+      "x_m": 775450.201,
+      "y_m": 2821609.352
+    },
+    "PTV2-04": {
+      "x_m": 773492.601,
+      "y_m": 2819308.169
+    },
+    "PTV2-05": {
+      "x_m": 774848.354,
+      "y_m": 2819477.326
+    },
+    "PTV2-06": {
+      "x_m": 777943.901,
+      "y_m": 2820484.981
+    },
+    "PTV2-07": {
+      "x_m": 775540.976,
+      "y_m": 2818307.781
+    },
+    "PTV2-08": {
+      "x_m": 770068.314,
+      "y_m": 2820869.668
+    },
+    "PTV2-09": {
+      "x_m": 772075.18,
+      "y_m": 2824130.511
+    },
+    "PTV2-10": {
+      "x_m": 775917.343,
+      "y_m": 2825698.103
+    },
+    "PTV2-11": {
+      "x_m": 772785.529,
+      "y_m": 2821719.673
+    },
+    "PTV2-12": {
+      "x_m": 774818.552,
+      "y_m": 2823718.171
+    },
+    "PTV2-13": {
+      "x_m": 771049.449,
+      "y_m": 2822530.806
+    },
+    "PTV2-14": {
+      "x_m": 778762.36,
+      "y_m": 2822286.047
+    },
+    "PTV2-15": {
+      "x_m": 776588.266,
+      "y_m": 2823628.743
+    },
+    "PTV2-16": {
+      "x_m": 777129.052,
+      "y_m": 2818936.451
+    },
+    "PTV2-17": {
+      "x_m": 771697.312,
+      "y_m": 2820509.929
+    },
+    "PTV2-18": {
+      "x_m": 773295.188,
+      "y_m": 2823196.731
+    },
+    "PTV2-19": {
+      "x_m": 776943.336,
+      "y_m": 2821655.359
+    },
+    "PTV2-20": {
+      "x_m": 777228.266,
+      "y_m": 2825103.149
+    },
+    "PTV2-21": {
+      "x_m": 774166.047,
+      "y_m": 2820730.258
+    },
+    "PTV2-22": {
+      "x_m": 775913.971,
+      "y_m": 2820302.669
+    },
+    "PTV2-23": {
+      "x_m": 774252.929,
+      "y_m": 2818263.332
+    },
+    "PTV2-24": {
+      "x_m": 773544.439,
+      "y_m": 2824437.075
+    },
+    "BASE": {
+      "x_m": 774949.638,
+      "y_m": 2822032.094
+    }
+  },
+  "weather_zones": [
+    {
+      "id": "W0",
+      "x_m": 774949.638,
+      "y_m": 2822032.094
+    }
+  ],
+  "bases": [
+    {
+      "id": "BASE",
+      "position_id": "BASE",
+      "pad_capacity": 1,
+      "charge_ports": 1,
+      "port_input_w": 240.0,
+      "charge_efficiency": 0.9,
+      "target_soc": 1.0,
+      "takeoff_s": 30.0,
+      "landing_s": 30.0,
+      "turnaround_s": 60.0,
+      "max_landing_wait_s": 240.0
+    }
+  ],
+  "profiles": {
+    "LGT": {
+      "profile_id": "LGT",
+      "capabilities": [
+        "RGB"
+      ],
+      "battery_usable_wh": 120.0,
+      "return_reserve_wh": 24.0,
+      "max_airspeed_mps": 14.0,
+      "max_groundspeed_mps": 12.0,
+      "min_groundspeed_mps": 1.0,
+      "max_flight_wind_mps": 12.0,
+      "takeoff_w": 360.0,
+      "cruise_w": 300.0,
+      "inspection_base_w": 300.0,
+      "hold_w": 300.0,
+      "landing_w": 340.0,
+      "ground_w": 0.0,
+      "charge_intake_battery_w": 140.0
+    },
+    "GEN": {
+      "profile_id": "GEN",
+      "capabilities": [
+        "RGB",
+        "ZOOM"
+      ],
+      "battery_usable_wh": 210.0,
+      "return_reserve_wh": 42.0,
+      "max_airspeed_mps": 16.0,
+      "max_groundspeed_mps": 14.0,
+      "min_groundspeed_mps": 1.0,
+      "max_flight_wind_mps": 14.0,
+      "takeoff_w": 510.0,
+      "cruise_w": 440.0,
+      "inspection_base_w": 425.0,
+      "hold_w": 425.0,
+      "landing_w": 480.0,
+      "ground_w": 0.0,
+      "charge_intake_battery_w": 210.0
+    }
+  },
+  "fleet": [
+    {
+      "id": "U01",
+      "profile_id": "LGT",
+      "home_base_id": "BASE",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U02",
+      "profile_id": "GEN",
+      "home_base_id": "BASE",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U03",
+      "profile_id": "LGT",
+      "home_base_id": "BASE",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U04",
+      "profile_id": "GEN",
+      "home_base_id": "BASE",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U05",
+      "profile_id": "LGT",
+      "home_base_id": "BASE",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U06",
+      "profile_id": "GEN",
+      "home_base_id": "BASE",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U07",
+      "profile_id": "LGT",
+      "home_base_id": "BASE",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U08",
+      "profile_id": "GEN",
+      "home_base_id": "BASE",
+      "initial_soc": 1.0
+    }
+  ],
+  "templates": {
+    "S": [
+      {
+        "duration_s": 60.0,
+        "capability": "RGB",
+        "wind_limit_mps": 10.0,
+        "power_factor": 1.0
+      }
+    ],
+    "L": [
+      {
+        "duration_s": 240.0,
+        "capability": "RGB",
+        "wind_limit_mps": 8.0,
+        "power_factor": 1.05
+      }
+    ],
+    "M": [
+      {
+        "duration_s": 80.0,
+        "capability": "ZOOM",
+        "wind_limit_mps": 9.0,
+        "power_factor": 1.1
+      },
+      {
+        "duration_s": 80.0,
+        "capability": "ZOOM",
+        "wind_limit_mps": 9.0,
+        "power_factor": 1.1
+      },
+      {
+        "duration_s": 80.0,
+        "capability": "ZOOM",
+        "wind_limit_mps": 9.0,
+        "power_factor": 1.1
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "PTV2-01-PER",
+      "position_id": "PTV2-01",
+      "template_id": "S",
+      "interval_s": 14400.0,
+      "initial_age_s": 7800.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-02-PER",
+      "position_id": "PTV2-02",
+      "template_id": "S",
+      "interval_s": 14400.0,
+      "initial_age_s": 2103.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-03-PER",
+      "position_id": "PTV2-03",
+      "template_id": "M",
+      "interval_s": 7200.0,
+      "initial_age_s": 3487.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-04-PER",
+      "position_id": "PTV2-04",
+      "template_id": "M",
+      "interval_s": 10800.0,
+      "initial_age_s": 7617.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-05-PER",
+      "position_id": "PTV2-05",
+      "template_id": "L",
+      "interval_s": 10800.0,
+      "initial_age_s": 10763.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-06-PER",
+      "position_id": "PTV2-06",
+      "template_id": "L",
+      "interval_s": 7200.0,
+      "initial_age_s": 301.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-07-PER",
+      "position_id": "PTV2-07",
+      "template_id": "L",
+      "interval_s": 14400.0,
+      "initial_age_s": 8558.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-08-PER",
+      "position_id": "PTV2-08",
+      "template_id": "S",
+      "interval_s": 10800.0,
+      "initial_age_s": 4072.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-09-PER",
+      "position_id": "PTV2-09",
+      "template_id": "M",
+      "interval_s": 7200.0,
+      "initial_age_s": 6167.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-10-PER",
+      "position_id": "PTV2-10",
+      "template_id": "S",
+      "interval_s": 14400.0,
+      "initial_age_s": 4167.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-11-PER",
+      "position_id": "PTV2-11",
+      "template_id": "M",
+      "interval_s": 14400.0,
+      "initial_age_s": 7322.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-12-PER",
+      "position_id": "PTV2-12",
+      "template_id": "L",
+      "interval_s": 7200.0,
+      "initial_age_s": 3863.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-13-PER",
+      "position_id": "PTV2-13",
+      "template_id": "S",
+      "interval_s": 14400.0,
+      "initial_age_s": 14318.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-14-PER",
+      "position_id": "PTV2-14",
+      "template_id": "M",
+      "interval_s": 7200.0,
+      "initial_age_s": 7059.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-15-PER",
+      "position_id": "PTV2-15",
+      "template_id": "L",
+      "interval_s": 10800.0,
+      "initial_age_s": 8065.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-16-PER",
+      "position_id": "PTV2-16",
+      "template_id": "S",
+      "interval_s": 10800.0,
+      "initial_age_s": 4438.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-17-PER",
+      "position_id": "PTV2-17",
+      "template_id": "M",
+      "interval_s": 10800.0,
+      "initial_age_s": 751.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-18-PER",
+      "position_id": "PTV2-18",
+      "template_id": "L",
+      "interval_s": 14400.0,
+      "initial_age_s": 2903.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-19-PER",
+      "position_id": "PTV2-19",
+      "template_id": "S",
+      "interval_s": 10800.0,
+      "initial_age_s": 10268.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-20-PER",
+      "position_id": "PTV2-20",
+      "template_id": "M",
+      "interval_s": 7200.0,
+      "initial_age_s": 6313.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-21-PER",
+      "position_id": "PTV2-21",
+      "template_id": "L",
+      "interval_s": 10800.0,
+      "initial_age_s": 1636.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-22-PER",
+      "position_id": "PTV2-22",
+      "template_id": "S",
+      "interval_s": 7200.0,
+      "initial_age_s": 316.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-23-PER",
+      "position_id": "PTV2-23",
+      "template_id": "M",
+      "interval_s": 14400.0,
+      "initial_age_s": 6225.0,
+      "priority_weight": 1.0
+    },
+    {
+      "id": "PTV2-24-PER",
+      "position_id": "PTV2-24",
+      "template_id": "L",
+      "interval_s": 7200.0,
+      "initial_age_s": 2135.0,
+      "priority_weight": 1.0
+    }
+  ],
+  "allowed_legs": [
+    [
+      "BASE",
+      "PTV2-01"
+    ],
+    [
+      "BASE",
+      "PTV2-02"
+    ],
+    [
+      "BASE",
+      "PTV2-03"
+    ],
+    [
+      "BASE",
+      "PTV2-04"
+    ],
+    [
+      "BASE",
+      "PTV2-05"
+    ],
+    [
+      "BASE",
+      "PTV2-06"
+    ],
+    [
+      "BASE",
+      "PTV2-07"
+    ],
+    [
+      "BASE",
+      "PTV2-08"
+    ],
+    [
+      "BASE",
+      "PTV2-09"
+    ],
+    [
+      "BASE",
+      "PTV2-10"
+    ],
+    [
+      "BASE",
+      "PTV2-11"
+    ],
+    [
+      "BASE",
+      "PTV2-12"
+    ],
+    [
+      "BASE",
+      "PTV2-13"
+    ],
+    [
+      "BASE",
+      "PTV2-14"
+    ],
+    [
+      "BASE",
+      "PTV2-15"
+    ],
+    [
+      "BASE",
+      "PTV2-16"
+    ],
+    [
+      "BASE",
+      "PTV2-17"
+    ],
+    [
+      "BASE",
+      "PTV2-18"
+    ],
+    [
+      "BASE",
+      "PTV2-19"
+    ],
+    [
+      "BASE",
+      "PTV2-20"
+    ],
+    [
+      "BASE",
+      "PTV2-21"
+    ],
+    [
+      "BASE",
+      "PTV2-22"
+    ],
+    [
+      "BASE",
+      "PTV2-23"
+    ],
+    [
+      "BASE",
+      "PTV2-24"
+    ],
+    [
+      "PTV2-01",
+      "BASE"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-10"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-12"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-20"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-01",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-02",
+      "BASE"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-09"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-12"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-20"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-02",
+      "PTV2-24"
+    ],
+    [
+      "PTV2-03",
+      "BASE"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-09"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-10"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-12"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-20"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-03",
+      "PTV2-24"
+    ],
+    [
+      "PTV2-04",
+      "BASE"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-09"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-12"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-20"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-04",
+      "PTV2-24"
+    ],
+    [
+      "PTV2-05",
+      "BASE"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-09"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-10"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-12"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-20"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-05",
+      "PTV2-24"
+    ],
+    [
+      "PTV2-06",
+      "BASE"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-10"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-12"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-20"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-06",
+      "PTV2-24"
+    ],
+    [
+      "PTV2-07",
+      "BASE"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-09"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-10"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-12"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-20"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-07",
+      "PTV2-24"
+    ],
+    [
+      "PTV2-08",
+      "BASE"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-09"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-12"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-08",
+      "PTV2-24"
+    ],
+    [
+      "PTV2-09",
+      "BASE"
+    ],
+    [
+      "PTV2-09",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-09",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-09",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-09",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-09",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-09",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-09",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-09",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-09",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-09",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-09",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-09",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-09",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-09",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-10",
+      "BASE"
+    ],
+    [
+      "PTV2-10",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-10",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-10",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-10",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-10",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-10",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-10",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-10",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-10",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-10",
+      "PTV2-20"
+    ],
+    [
+      "PTV2-10",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-10",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-11",
+      "BASE"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-09"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-12"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-20"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-11",
+      "PTV2-24"
+    ],
+    [
+      "PTV2-12",
+      "BASE"
+    ],
+    [
+      "PTV2-12",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-12",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-12",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-12",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-12",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-12",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-12",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-12",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-12",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-12",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-12",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-12",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-12",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-12",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-12",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-12",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-12",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-12",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-12",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-12",
+      "PTV2-24"
+    ],
+    [
+      "PTV2-13",
+      "BASE"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-09"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-12"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-13",
+      "PTV2-24"
+    ],
+    [
+      "PTV2-14",
+      "BASE"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-10"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-12"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-20"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-14",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-15",
+      "BASE"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-10"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-12"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-20"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-15",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-16",
+      "BASE"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-09"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-10"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-12"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-20"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-16",
+      "PTV2-24"
+    ],
+    [
+      "PTV2-17",
+      "BASE"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-09"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-12"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-20"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-17",
+      "PTV2-24"
+    ],
+    [
+      "PTV2-18",
+      "BASE"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-09"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-12"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-18",
+      "PTV2-24"
+    ],
+    [
+      "PTV2-19",
+      "BASE"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-10"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-12"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-20"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-19",
+      "PTV2-24"
+    ],
+    [
+      "PTV2-20",
+      "BASE"
+    ],
+    [
+      "PTV2-20",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-20",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-20",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-20",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-20",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-20",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-20",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-20",
+      "PTV2-10"
+    ],
+    [
+      "PTV2-20",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-20",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-20",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-20",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-20",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-20",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-20",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-20",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-20",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-21",
+      "BASE"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-09"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-12"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-20"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-21",
+      "PTV2-24"
+    ],
+    [
+      "PTV2-22",
+      "BASE"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-09"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-10"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-12"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-20"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-23"
+    ],
+    [
+      "PTV2-22",
+      "PTV2-24"
+    ],
+    [
+      "PTV2-23",
+      "BASE"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-01"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-09"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-10"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-12"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-14"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-15"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-20"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-23",
+      "PTV2-24"
+    ],
+    [
+      "PTV2-24",
+      "BASE"
+    ],
+    [
+      "PTV2-24",
+      "PTV2-02"
+    ],
+    [
+      "PTV2-24",
+      "PTV2-03"
+    ],
+    [
+      "PTV2-24",
+      "PTV2-04"
+    ],
+    [
+      "PTV2-24",
+      "PTV2-05"
+    ],
+    [
+      "PTV2-24",
+      "PTV2-06"
+    ],
+    [
+      "PTV2-24",
+      "PTV2-07"
+    ],
+    [
+      "PTV2-24",
+      "PTV2-08"
+    ],
+    [
+      "PTV2-24",
+      "PTV2-11"
+    ],
+    [
+      "PTV2-24",
+      "PTV2-12"
+    ],
+    [
+      "PTV2-24",
+      "PTV2-13"
+    ],
+    [
+      "PTV2-24",
+      "PTV2-16"
+    ],
+    [
+      "PTV2-24",
+      "PTV2-17"
+    ],
+    [
+      "PTV2-24",
+      "PTV2-18"
+    ],
+    [
+      "PTV2-24",
+      "PTV2-19"
+    ],
+    [
+      "PTV2-24",
+      "PTV2-21"
+    ],
+    [
+      "PTV2-24",
+      "PTV2-22"
+    ],
+    [
+      "PTV2-24",
+      "PTV2-23"
+    ]
+  ],
+  "metadata": {
+    "source_connections": "undirected source pairs expanded in both directed orientations",
+    "original_undirected_pairs": 273,
+    "allowed_directed_legs": 546
+  },
+  "clock": {
+    "evaluation_start_s": 86400,
+    "evaluation_end_s": 345600,
+    "recovery_end_s": 349200
+  },
+  "air_capacity": 8,
+  "provenance": {
+    "source": "V4 frozen 24-site input",
+    "source_root": "data/study_v2/primary/scenarios",
+    "source_input_sha256": {
+      "aircraft_profiles.csv": "64b93199bcd46ce1710f30d9dad24fcb2d5b2f18e71c57d608d7932878771c24",
+      "layouts/site/assets.csv": "a8c904b25d9757093cf7d2d2cf2e3bb0e1cd75c904778dcd573cab254f783b8f",
+      "layouts/site/demand_periodic_mixed_202.csv": "8f92eb8c79a5e170da0b3056eac19047384fc30d6d0441f3133abe52139a01e3",
+      "layouts/site/undirected_legs.csv": "f17df83787850ebfa481f1dbf66a3288a31ab5f9072e7793acf0c0fa6fb69c80"
+    }
+  }
+}

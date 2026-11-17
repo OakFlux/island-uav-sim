@@ -1,0 +1,8 @@
+{
+  "network_id": "legacy_24",
+  "fleet_size": 4,
+  "weather": "synthetic",
+  "duration_hours": 6,
+  "recovery_policy": "HOME",
+  "initial_age_mode": "due"
+}

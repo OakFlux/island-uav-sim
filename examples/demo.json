@@ -1,0 +1,9 @@
+{
+  "network_id": "pingtan_96",
+  "fleet_size": 12,
+  "weather": "synthetic",
+  "duration_hours": 6,
+  "warmup_hours": 0,
+  "initial_age_mode": "due",
+  "recovery_policy": "NEAR"
+}

@@ -1,0 +1,1713 @@
+{
+  "schema_version": 1,
+  "scenario_id": "pingtan_96_seed303",
+  "positions": {
+    "P001": {
+      "x_m": 779672.5473867904,
+      "y_m": 2829696.273287941,
+      "longitude": 119.783532178,
+      "latitude": 25.5582457
+    },
+    "P002": {
+      "x_m": 771221.8922532697,
+      "y_m": 2817667.938776216,
+      "longitude": 119.6970732,
+      "latitude": 25.4513199
+    },
+    "P003": {
+      "x_m": 782188.9630143347,
+      "y_m": 2833556.396330669,
+      "longitude": 119.80936694900001,
+      "latitude": 25.592583799999993
+    },
+    "P004": {
+      "x_m": 774848.3537796137,
+      "y_m": 2819477.3260810813,
+      "longitude": 119.733471933,
+      "latitude": 25.4669743
+    },
+    "P005": {
+      "x_m": 783062.6590390906,
+      "y_m": 2821160.710759022,
+      "longitude": 119.815443046,
+      "latitude": 25.480613899999998
+    },
+    "P006": {
+      "x_m": 777943.90143075,
+      "y_m": 2820484.981168119,
+      "longitude": 119.764437996,
+      "latitude": 25.47548685
+    },
+    "P007": {
+      "x_m": 775540.975715352,
+      "y_m": 2818307.7812273977,
+      "longitude": 119.74011497299999,
+      "latitude": 25.456296400000003
+    },
+    "P008": {
+      "x_m": 783051.5735831019,
+      "y_m": 2833703.2216886454,
+      "longitude": 119.817977591,
+      "latitude": 25.59374289999999
+    },
+    "P009": {
+      "x_m": 780095.0385752656,
+      "y_m": 2830930.464714371,
+      "longitude": 119.7879911,
+      "latitude": 25.5692977
+    },
+    "P010": {
+      "x_m": 782669.8842029917,
+      "y_m": 2834384.678474661,
+      "longitude": 119.8143252,
+      "latitude": 25.599962399999995
+    },
+    "P011": {
+      "x_m": 775450.2006219641,
+      "y_m": 2821609.3516617706,
+      "longitude": 119.7398882,
+      "latitude": 25.486093900000004
+    },
+    "P012": {
+      "x_m": 773492.6014855059,
+      "y_m": 2819308.169296434,
+      "longitude": 119.7199662,
+      "latitude": 25.4656989
+    },
+    "P013": {
+      "x_m": 778353.981362496,
+      "y_m": 2824110.074171649,
+      "longitude": 119.76926279,
+      "latitude": 25.50810795
+    },
+    "P014": {
+      "x_m": 782492.6980713985,
+      "y_m": 2828526.9735560836,
+      "longitude": 119.81132768600001,
+      "latitude": 25.547162949999997
+    },
+    "P015": {
+      "x_m": 772219.3227672903,
+      "y_m": 2818959.257913729,
+      "longitude": 119.70724381,
+      "latitude": 25.462785650000004
+    },
+    "P016": {
+      "x_m": 779075.0948422174,
+      "y_m": 2828733.263277857,
+      "longitude": 119.777391,
+      "latitude": 25.549672499999993
+    },
+    "P017": {
+      "x_m": 778659.0935387027,
+      "y_m": 2811824.2722915625,
+      "longitude": 119.76975645993127,
+      "latitude": 25.397233486902582
+    },
+    "P018": {
+      "x_m": 788370.1275781884,
+      "y_m": 2830428.370228976,
+      "longitude": 119.87017023072221,
+      "latitude": 25.56317742882225
+    },
+    "P019": {
+      "x_m": 773320.4293393198,
+      "y_m": 2826403.05314423,
+      "longitude": 119.71969704903782,
+      "latitude": 25.529728395947362
+    },
+    "P020": {
+      "x_m": 777661.1892127197,
+      "y_m": 2835064.3387493463,
+      "longitude": 119.7646451,
+      "latitude": 25.607043899999994
+    },
+    "P021": {
+      "x_m": 774085.7772926183,
+      "y_m": 2814366.5407215008,
+      "longitude": 119.7248562258854,
+      "latitude": 25.421014556730853
+    },
+    "P022": {
+      "x_m": 781983.8952771892,
+      "y_m": 2824855.517379466,
+      "longitude": 119.80549800000001,
+      "latitude": 25.514145100000004
+    },
+    "P023": {
+      "x_m": 780825.8770391359,
+      "y_m": 2818286.1497711223,
+      "longitude": 119.79261709621406,
+      "latitude": 25.455111249766176
+    },
+    "P024": {
+      "x_m": 775459.2614074183,
+      "y_m": 2829246.826473282,
+      "longitude": 119.74154414591615,
+      "latitude": 25.5549828477788
+    },
+    "P025": {
+      "x_m": 784985.0187520441,
+      "y_m": 2830764.8972359886,
+      "longitude": 119.8365825,
+      "latitude": 25.5668693
+    },
+    "P026": {
+      "x_m": 777133.1861570299,
+      "y_m": 2815657.257603879,
+      "longitude": 119.75538970391321,
+      "latitude": 25.432092214834704
+    },
+    "P027": {
+      "x_m": 776849.7932079154,
+      "y_m": 2832090.7593009663,
+      "longitude": 119.75595841650768,
+      "latitude": 25.58037511806548
+    },
+    "P028": {
+      "x_m": 776280.747902654,
+      "y_m": 2826402.68109597,
+      "longitude": 119.74912709999998,
+      "latitude": 25.5291754
+    },
+    "P029": {
+      "x_m": 773219.6908044614,
+      "y_m": 2823499.8895822885,
+      "longitude": 119.7181052617841,
+      "latitude": 25.503559726431067
+    },
+    "P030": {
+      "x_m": 780420.2952049562,
+      "y_m": 2822132.1770128557,
+      "longitude": 119.78938834165473,
+      "latitude": 25.48987817433939
+    },
+    "P031": {
+      "x_m": 780365.9302135155,
+      "y_m": 2835829.3676266405,
+      "longitude": 119.79171107915202,
+      "latitude": 25.6134324997262
+    },
+    "P032": {
+      "x_m": 786934.7559423322,
+      "y_m": 2828192.4412238123,
+      "longitude": 119.85541965308997,
+      "latitude": 25.54329062113442
+    },
+    "P033": {
+      "x_m": 776180.8453680713,
+      "y_m": 2812870.510270709,
+      "longitude": 119.74535991967642,
+      "latitude": 25.407132530275835
+    },
+    "P034": {
+      "x_m": 778238.6319321822,
+      "y_m": 2817946.1675740117,
+      "longitude": 119.7668424875279,
+      "latitude": 25.452531638370637
+    },
+    "P035": {
+      "x_m": 782557.5919664463,
+      "y_m": 2831132.7042486677,
+      "longitude": 119.812522,
+      "latitude": 25.5706529
+    },
+    "P036": {
+      "x_m": 773491.607465477,
+      "y_m": 2816778.92052772,
+      "longitude": 119.71944326466998,
+      "latitude": 25.442884450411388
+    },
+    "P037": {
+      "x_m": 780177.3921805375,
+      "y_m": 2826563.1165271825,
+      "longitude": 119.78789790000002,
+      "latitude": 25.529889999999998
+    },
+    "P038": {
+      "x_m": 779834.7395268404,
+      "y_m": 2833436.316037275,
+      "longitude": 119.78592617477797,
+      "latitude": 25.591948958751967
+    },
+    "P039": {
+      "x_m": 775483.8552158881,
+      "y_m": 2824211.620669936,
+      "longitude": 119.7407556,
+      "latitude": 25.509560399999998
+    },
+    "P040": {
+      "x_m": 772776.1407492989,
+      "y_m": 2821415.151127027,
+      "longitude": 119.71327388590038,
+      "latitude": 25.48483644339469
+    },
+    "P041": {
+      "x_m": 778458.1550893595,
+      "y_m": 2813936.998792629,
+      "longitude": 119.76819629999999,
+      "latitude": 25.4163279
+    },
+    "P042": {
+      "x_m": 784879.5507656743,
+      "y_m": 2834644.8241024525,
+      "longitude": 119.83635921006794,
+      "latitude": 25.601883737385826
+    },
+    "P043": {
+      "x_m": 770895.8392122532,
+      "y_m": 2815707.811488619,
+      "longitude": 119.69344012350157,
+      "latitude": 25.43369802120251
+    },
+    "P044": {
+      "x_m": 784451.5682256197,
+      "y_m": 2828787.6113119875,
+      "longitude": 119.8308585289373,
+      "latitude": 25.549138275996444
+    },
+    "P045": {
+      "x_m": 777366.7963587054,
+      "y_m": 2829728.318454809,
+      "longitude": 119.7606113,
+      "latitude": 25.558969199999996
+    },
+    "P046": {
+      "x_m": 781071.1300619039,
+      "y_m": 2820276.3374928306,
+      "longitude": 119.79546876545257,
+      "latitude": 25.4730158115509
+    },
+    "P047": {
+      "x_m": 778224.3741280697,
+      "y_m": 2826365.9041848797,
+      "longitude": 119.76844165026479,
+      "latitude": 25.528479597396363
+    },
+    "P048": {
+      "x_m": 782189.1704037342,
+      "y_m": 2836477.419197878,
+      "longitude": 119.80998529999549,
+      "latitude": 25.61892976977512
+    },
+    "P049": {
+      "x_m": 777119.4515901671,
+      "y_m": 2822621.069846663,
+      "longitude": 119.7566853,
+      "latitude": 25.494908600000002
+    },
+    "P050": {
+      "x_m": 775338.8684054172,
+      "y_m": 2816287.426132797,
+      "longitude": 119.73769450000002,
+      "latitude": 25.4381099
+    },
+    "P051": {
+      "x_m": 780197.9756598375,
+      "y_m": 2824262.503725429,
+      "longitude": 119.78762275375898,
+      "latitude": 25.50913521721226
+    },
+    "P052": {
+      "x_m": 782070.8683191456,
+      "y_m": 2822938.4320715186,
+      "longitude": 119.80596032645046,
+      "latitude": 25.496837201878773
+    },
+    "P053": {
+      "x_m": 778646.9756485628,
+      "y_m": 2832000.267951247,
+      "longitude": 119.77381342133215,
+      "latitude": 25.57922088644343
+    },
+    "P054": {
+      "x_m": 777396.8302860195,
+      "y_m": 2827950.0525409896,
+      "longitude": 119.7605422,
+      "latitude": 25.542923799999997
+    },
+    "P055": {
+      "x_m": 779505.517138432,
+      "y_m": 2819459.2386043835,
+      "longitude": 119.77974258730627,
+      "latitude": 25.46594144495669
+    },
+    "P056": {
+      "x_m": 774940.6002388328,
+      "y_m": 2827542.371107612,
+      "longitude": 119.73603747764885,
+      "latitude": 25.539705071790777
+    },
+    "P057": {
+      "x_m": 782129.4491503965,
+      "y_m": 2826589.1028096112,
+      "longitude": 119.80730881508529,
+      "latitude": 25.529753575567426
+    },
+    "P058": {
+      "x_m": 786705.6904194842,
+      "y_m": 2829995.694642002,
+      "longitude": 119.8535277867587,
+      "latitude": 25.55959888941464
+    },
+    "P059": {
+      "x_m": 778716.4582181827,
+      "y_m": 2822037.6813255358,
+      "longitude": 119.77243620000002,
+      "latitude": 25.4893471
+    },
+    "P060": {
+      "x_m": 783860.9477545678,
+      "y_m": 2832188.0845660334,
+      "longitude": 119.82570647172065,
+      "latitude": 25.579921908971084
+    },
+    "P061": {
+      "x_m": 781418.777921603,
+      "y_m": 2829807.4452576065,
+      "longitude": 119.8009190067601,
+      "latitude": 25.558917009087974
+    },
+    "P062": {
+      "x_m": 775791.9893424944,
+      "y_m": 2814674.031204478,
+      "longitude": 119.74186618119397,
+      "latitude": 25.423472766823707
+    },
+    "P063": {
+      "x_m": 772685.9310032912,
+      "y_m": 2815230.7807747712,
+      "longitude": 119.71112639042398,
+      "latitude": 25.42906768666899
+    },
+    "P064": {
+      "x_m": 776913.1124092678,
+      "y_m": 2819206.7387613785,
+      "longitude": 119.7539324,
+      "latitude": 25.464149799999998
+    },
+    "P065": {
+      "x_m": 780641.5994689197,
+      "y_m": 2828129.0007298524,
+      "longitude": 119.79284000000001,
+      "latitude": 25.543925800000004
+    },
+    "P066": {
+      "x_m": 781068.4168729957,
+      "y_m": 2832235.0439122524,
+      "longitude": 119.7979444,
+      "latitude": 25.580879600000003
+    },
+    "P067": {
+      "x_m": 777788.2529455062,
+      "y_m": 2833446.610270637,
+      "longitude": 119.7655732,
+      "latitude": 25.592428399999996
+    },
+    "P068": {
+      "x_m": 778851.1651477065,
+      "y_m": 2836385.014761525,
+      "longitude": 119.77675800000002,
+      "latitude": 25.618731499999992
+    },
+    "P069": {
+      "x_m": 783795.2933807829,
+      "y_m": 2822553.417096503,
+      "longitude": 119.82301673336374,
+      "latitude": 25.493035414530695
+    },
+    "P070": {
+      "x_m": 776841.7113341804,
+      "y_m": 2817250.885840526,
+      "longitude": 119.7528213370999,
+      "latitude": 25.446521194374128
+    },
+    "P071": {
+      "x_m": 774535.680013099,
+      "y_m": 2825423.383133153,
+      "longitude": 119.7315783810211,
+      "latitude": 25.520666711935824
+    },
+    "P072": {
+      "x_m": 783528.5138016539,
+      "y_m": 2829983.4548201566,
+      "longitude": 119.82193397189104,
+      "latitude": 25.5601013479407
+    },
+    "P073": {
+      "x_m": 777228.835269447,
+      "y_m": 2825102.8879361833,
+      "longitude": 119.75828412517026,
+      "latitude": 25.51727406265992
+    },
+    "P074": {
+      "x_m": 774661.083190779,
+      "y_m": 2822968.4150726562,
+      "longitude": 119.73232340386501,
+      "latitude": 25.498499262317168
+    },
+    "P075": {
+      "x_m": 774049.1574406317,
+      "y_m": 2820695.9301842186,
+      "longitude": 119.72577870000002,
+      "latitude": 25.478114200000004
+    },
+    "P076": {
+      "x_m": 776526.4957044239,
+      "y_m": 2820653.9991867878,
+      "longitude": 119.7503880577566,
+      "latitude": 25.477276261525486
+    },
+    "P077": {
+      "x_m": 774148.3982158876,
+      "y_m": 2818030.6489096363,
+      "longitude": 119.72622260441074,
+      "latitude": 25.454054348493706
+    },
+    "P078": {
+      "x_m": 778999.241013031,
+      "y_m": 2834543.965600998,
+      "longitude": 119.777847,
+      "latitude": 25.602097800000003
+    },
+    "P079": {
+      "x_m": 782376.4582641578,
+      "y_m": 2819810.007663083,
+      "longitude": 119.80834117104024,
+      "latitude": 25.46856186293906
+    },
+    "P080": {
+      "x_m": 783349.0793802184,
+      "y_m": 2835586.4908676487,
+      "longitude": 119.82133551590431,
+      "latitude": 25.61067169854667
+    },
+    "P081": {
+      "x_m": 771947.648350141,
+      "y_m": 2820305.598863544,
+      "longitude": 119.70481614980724,
+      "latitude": 25.47497999801801
+    },
+    "P082": {
+      "x_m": 778392.1486395708,
+      "y_m": 2830640.7956305817,
+      "longitude": 119.77099660000002,
+      "latitude": 25.5670068
+    },
+    "P083": {
+      "x_m": 777535.6327149959,
+      "y_m": 2812654.914434839,
+      "longitude": 119.7587705,
+      "latitude": 25.404935799999997
+    },
+    "P084": {
+      "x_m": 781209.6519747094,
+      "y_m": 2834755.59314129,
+      "longitude": 119.79987858814853,
+      "latitude": 25.603586908629246
+    },
+    "P085": {
+      "x_m": 771969.8249284003,
+      "y_m": 2816524.77684802,
+      "longitude": 119.7042737,
+      "latitude": 25.440871299999994
+    },
+    "P086": {
+      "x_m": 779024.1122617109,
+      "y_m": 2825278.854465929,
+      "longitude": 119.77616616407758,
+      "latitude": 25.518524077222157
+    },
+    "P087": {
+      "x_m": 777067.7385099414,
+      "y_m": 2814263.80798404,
+      "longitude": 119.75445366917253,
+      "latitude": 25.41953537252962
+    },
+    "P088": {
+      "x_m": 779465.2799771064,
+      "y_m": 2817407.100520225,
+      "longitude": 119.77891738170084,
+      "latitude": 25.4474390118463
+    },
+    "P089": {
+      "x_m": 779376.8722493073,
+      "y_m": 2823218.8179365513,
+      "longitude": 119.77924458766711,
+      "latitude": 25.499876451235828
+    },
+    "P090": {
+      "x_m": 779298.7732635661,
+      "y_m": 2820869.8912385427,
+      "longitude": 119.7779808915437,
+      "latitude": 25.478704246195555
+    },
+    "P091": {
+      "x_m": 781808.5835679554,
+      "y_m": 2821488.49375763,
+      "longitude": 119.80305003651621,
+      "latitude": 25.48380917122186
+    },
+    "P092": {
+      "x_m": 784279.0731373264,
+      "y_m": 2833437.6781124757,
+      "longitude": 119.83012999999332,
+      "latitude": 25.591111955278702
+    },
+    "P093": {
+      "x_m": 785523.3991028495,
+      "y_m": 2829604.6047270293,
+      "longitude": 119.8416889,
+      "latitude": 25.556300399999998
+    },
+    "P094": {
+      "x_m": 775893.3764749176,
+      "y_m": 2822840.714219029,
+      "longitude": 119.74454491174771,
+      "latitude": 25.497118513426358
+    },
+    "P095": {
+      "x_m": 774177.923604408,
+      "y_m": 2815599.368171154,
+      "longitude": 119.72602182419652,
+      "latitude": 25.432118054569507
+    },
+    "P096": {
+      "x_m": 780985.2845574145,
+      "y_m": 2825583.489338994,
+      "longitude": 119.795724300488,
+      "latitude": 25.52090094833144
+    },
+    "B1": {
+      "x_m": 776568.4842415017,
+      "y_m": 2816885.8582311436,
+      "longitude": 119.7500321,
+      "latitude": 25.443279499999992
+    },
+    "B2": {
+      "x_m": 778948.9628142348,
+      "y_m": 2824606.6461416422,
+      "longitude": 119.77527962811698,
+      "latitude": 25.512475035883
+    },
+    "B3": {
+      "x_m": 782711.5867812486,
+      "y_m": 2832089.1329249516,
+      "longitude": 119.8142552,
+      "latitude": 25.5792499
+    }
+  },
+  "weather_zones": [
+    {
+      "id": "W1",
+      "x_m": 775625.502453145,
+      "y_m": 2813510.0191326602,
+      "latitude": 25.413004,
+      "longitude": 119.739975,
+      "role": "research nearest-representative Voronoi zone; not native-grid boundary",
+      "product": "ecmwf_ifs",
+      "height_m": 10
+    },
+    {
+      "id": "W2",
+      "x_m": 785439.9566894169,
+      "y_m": 2813715.1813929826,
+      "latitude": 25.413004,
+      "longitude": 119.83749,
+      "role": "research nearest-representative Voronoi zone; not native-grid boundary",
+      "product": "ecmwf_ifs",
+      "height_m": 10
+    },
+    {
+      "id": "W3",
+      "x_m": 771973.7992383563,
+      "y_m": 2829022.201163255,
+      "latitude": 25.553602,
+      "longitude": 119.70684,
+      "role": "research nearest-representative Voronoi zone; not native-grid boundary",
+      "product": "ecmwf_ifs",
+      "height_m": 10
+    },
+    {
+      "id": "W4",
+      "x_m": 788529.1424981011,
+      "y_m": 2821575.638593528,
+      "latitude": 25.483303,
+      "longitude": 119.86985,
+      "role": "research nearest-representative Voronoi zone; not native-grid boundary",
+      "product": "ecmwf_ifs",
+      "height_m": 10
+    },
+    {
+      "id": "W5",
+      "x_m": 775058.7604242803,
+      "y_m": 2836879.0307767447,
+      "latitude": 25.6239,
+      "longitude": 119.73913,
+      "role": "research nearest-representative Voronoi zone; not native-grid boundary",
+      "product": "ecmwf_ifs",
+      "height_m": 10
+    },
+    {
+      "id": "W6",
+      "x_m": 784886.651150431,
+      "y_m": 2837086.012634649,
+      "latitude": 25.6239,
+      "longitude": 119.83695,
+      "role": "research nearest-representative Voronoi zone; not native-grid boundary",
+      "product": "ecmwf_ifs",
+      "height_m": 10
+    }
+  ],
+  "bases": [
+    {
+      "id": "B1",
+      "position_id": "B1",
+      "pad_capacity": 1,
+      "charge_ports": 1,
+      "port_input_w": 240,
+      "charge_efficiency": 0.9,
+      "target_soc": 1.0,
+      "takeoff_s": 30,
+      "landing_s": 30,
+      "turnaround_s": 60,
+      "max_landing_wait_s": 240
+    },
+    {
+      "id": "B2",
+      "position_id": "B2",
+      "pad_capacity": 1,
+      "charge_ports": 1,
+      "port_input_w": 240,
+      "charge_efficiency": 0.9,
+      "target_soc": 1.0,
+      "takeoff_s": 30,
+      "landing_s": 30,
+      "turnaround_s": 60,
+      "max_landing_wait_s": 240
+    },
+    {
+      "id": "B3",
+      "position_id": "B3",
+      "pad_capacity": 1,
+      "charge_ports": 1,
+      "port_input_w": 240,
+      "charge_efficiency": 0.9,
+      "target_soc": 1.0,
+      "takeoff_s": 30,
+      "landing_s": 30,
+      "turnaround_s": 60,
+      "max_landing_wait_s": 240
+    }
+  ],
+  "profiles": {
+    "LGT": {
+      "battery_usable_wh": 120.0,
+      "return_reserve_wh": 24.0,
+      "max_airspeed_mps": 14.0,
+      "max_groundspeed_mps": 12.0,
+      "min_groundspeed_mps": 1.0,
+      "max_flight_wind_mps": 12.0,
+      "takeoff_w": 360.0,
+      "cruise_w": 300.0,
+      "inspection_base_w": 300.0,
+      "hold_w": 300.0,
+      "landing_w": 340.0,
+      "ground_w": 0.0,
+      "charge_intake_battery_w": 140.0,
+      "capabilities": [
+        "RGB"
+      ]
+    },
+    "GEN": {
+      "battery_usable_wh": 210.0,
+      "return_reserve_wh": 42.0,
+      "max_airspeed_mps": 16.0,
+      "max_groundspeed_mps": 14.0,
+      "min_groundspeed_mps": 1.0,
+      "max_flight_wind_mps": 14.0,
+      "takeoff_w": 510.0,
+      "cruise_w": 440.0,
+      "inspection_base_w": 425.0,
+      "hold_w": 425.0,
+      "landing_w": 480.0,
+      "ground_w": 0.0,
+      "charge_intake_battery_w": 210.0,
+      "capabilities": [
+        "RGB",
+        "ZOOM"
+      ]
+    }
+  },
+  "fleet": [
+    {
+      "id": "U1-B1-LGT",
+      "profile_id": "LGT",
+      "home_base_id": "B1",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U1-B1-GEN",
+      "profile_id": "GEN",
+      "home_base_id": "B1",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U1-B2-LGT",
+      "profile_id": "LGT",
+      "home_base_id": "B2",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U1-B2-GEN",
+      "profile_id": "GEN",
+      "home_base_id": "B2",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U1-B3-LGT",
+      "profile_id": "LGT",
+      "home_base_id": "B3",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U1-B3-GEN",
+      "profile_id": "GEN",
+      "home_base_id": "B3",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U2-B1-LGT",
+      "profile_id": "LGT",
+      "home_base_id": "B1",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U2-B1-GEN",
+      "profile_id": "GEN",
+      "home_base_id": "B1",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U2-B2-LGT",
+      "profile_id": "LGT",
+      "home_base_id": "B2",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U2-B2-GEN",
+      "profile_id": "GEN",
+      "home_base_id": "B2",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U2-B3-LGT",
+      "profile_id": "LGT",
+      "home_base_id": "B3",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U2-B3-GEN",
+      "profile_id": "GEN",
+      "home_base_id": "B3",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U3-B1-LGT",
+      "profile_id": "LGT",
+      "home_base_id": "B1",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U3-B1-GEN",
+      "profile_id": "GEN",
+      "home_base_id": "B1",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U3-B2-LGT",
+      "profile_id": "LGT",
+      "home_base_id": "B2",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U3-B2-GEN",
+      "profile_id": "GEN",
+      "home_base_id": "B2",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U3-B3-LGT",
+      "profile_id": "LGT",
+      "home_base_id": "B3",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U3-B3-GEN",
+      "profile_id": "GEN",
+      "home_base_id": "B3",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U4-B1-LGT",
+      "profile_id": "LGT",
+      "home_base_id": "B1",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U4-B1-GEN",
+      "profile_id": "GEN",
+      "home_base_id": "B1",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U4-B2-LGT",
+      "profile_id": "LGT",
+      "home_base_id": "B2",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U4-B2-GEN",
+      "profile_id": "GEN",
+      "home_base_id": "B2",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U4-B3-LGT",
+      "profile_id": "LGT",
+      "home_base_id": "B3",
+      "initial_soc": 1.0
+    },
+    {
+      "id": "U4-B3-GEN",
+      "profile_id": "GEN",
+      "home_base_id": "B3",
+      "initial_soc": 1.0
+    }
+  ],
+  "templates": {
+    "S": [
+      {
+        "duration_s": 60,
+        "capability": "RGB",
+        "wind_limit_mps": 10,
+        "power_factor": 1.0
+      }
+    ],
+    "L": [
+      {
+        "duration_s": 240,
+        "capability": "RGB",
+        "wind_limit_mps": 8,
+        "power_factor": 1.05
+      }
+    ],
+    "M": [
+      {
+        "duration_s": 80,
+        "capability": "ZOOM",
+        "wind_limit_mps": 9,
+        "power_factor": 1.1
+      },
+      {
+        "duration_s": 80,
+        "capability": "ZOOM",
+        "wind_limit_mps": 9,
+        "power_factor": 1.1
+      },
+      {
+        "duration_s": 80,
+        "capability": "ZOOM",
+        "wind_limit_mps": 9,
+        "power_factor": 1.1
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "P001",
+      "position_id": "P001",
+      "template_id": "L",
+      "interval_s": 10800,
+      "initial_age_s": 10629,
+      "priority_weight": 1
+    },
+    {
+      "id": "P002",
+      "position_id": "P002",
+      "template_id": "L",
+      "interval_s": 7200,
+      "initial_age_s": 5186,
+      "priority_weight": 1
+    },
+    {
+      "id": "P003",
+      "position_id": "P003",
+      "template_id": "L",
+      "interval_s": 7200,
+      "initial_age_s": 4452,
+      "priority_weight": 1
+    },
+    {
+      "id": "P004",
+      "position_id": "P004",
+      "template_id": "L",
+      "interval_s": 14400,
+      "initial_age_s": 12599,
+      "priority_weight": 1
+    },
+    {
+      "id": "P005",
+      "position_id": "P005",
+      "template_id": "L",
+      "interval_s": 7200,
+      "initial_age_s": 6403,
+      "priority_weight": 1
+    },
+    {
+      "id": "P006",
+      "position_id": "P006",
+      "template_id": "L",
+      "interval_s": 7200,
+      "initial_age_s": 4405,
+      "priority_weight": 1
+    },
+    {
+      "id": "P007",
+      "position_id": "P007",
+      "template_id": "L",
+      "interval_s": 10800,
+      "initial_age_s": 6281,
+      "priority_weight": 1
+    },
+    {
+      "id": "P008",
+      "position_id": "P008",
+      "template_id": "M",
+      "interval_s": 14400,
+      "initial_age_s": 4779,
+      "priority_weight": 1
+    },
+    {
+      "id": "P009",
+      "position_id": "P009",
+      "template_id": "M",
+      "interval_s": 14400,
+      "initial_age_s": 5205,
+      "priority_weight": 1
+    },
+    {
+      "id": "P010",
+      "position_id": "P010",
+      "template_id": "M",
+      "interval_s": 14400,
+      "initial_age_s": 5246,
+      "priority_weight": 1
+    },
+    {
+      "id": "P011",
+      "position_id": "P011",
+      "template_id": "M",
+      "interval_s": 7200,
+      "initial_age_s": 1183,
+      "priority_weight": 1
+    },
+    {
+      "id": "P012",
+      "position_id": "P012",
+      "template_id": "M",
+      "interval_s": 7200,
+      "initial_age_s": 4944,
+      "priority_weight": 1
+    },
+    {
+      "id": "P013",
+      "position_id": "P013",
+      "template_id": "S",
+      "interval_s": 14400,
+      "initial_age_s": 12330,
+      "priority_weight": 1
+    },
+    {
+      "id": "P014",
+      "position_id": "P014",
+      "template_id": "S",
+      "interval_s": 14400,
+      "initial_age_s": 4510,
+      "priority_weight": 1
+    },
+    {
+      "id": "P015",
+      "position_id": "P015",
+      "template_id": "S",
+      "interval_s": 7200,
+      "initial_age_s": 1020,
+      "priority_weight": 1
+    },
+    {
+      "id": "P016",
+      "position_id": "P016",
+      "template_id": "S",
+      "interval_s": 14400,
+      "initial_age_s": 9680,
+      "priority_weight": 1
+    },
+    {
+      "id": "P017",
+      "position_id": "P017",
+      "template_id": "S",
+      "interval_s": 14400,
+      "initial_age_s": 12942,
+      "priority_weight": 1
+    },
+    {
+      "id": "P018",
+      "position_id": "P018",
+      "template_id": "M",
+      "interval_s": 10800,
+      "initial_age_s": 10549,
+      "priority_weight": 1
+    },
+    {
+      "id": "P019",
+      "position_id": "P019",
+      "template_id": "S",
+      "interval_s": 7200,
+      "initial_age_s": 3690,
+      "priority_weight": 1
+    },
+    {
+      "id": "P020",
+      "position_id": "P020",
+      "template_id": "M",
+      "interval_s": 7200,
+      "initial_age_s": 285,
+      "priority_weight": 1
+    },
+    {
+      "id": "P021",
+      "position_id": "P021",
+      "template_id": "S",
+      "interval_s": 10800,
+      "initial_age_s": 6429,
+      "priority_weight": 1
+    },
+    {
+      "id": "P022",
+      "position_id": "P022",
+      "template_id": "L",
+      "interval_s": 14400,
+      "initial_age_s": 11443,
+      "priority_weight": 1
+    },
+    {
+      "id": "P023",
+      "position_id": "P023",
+      "template_id": "M",
+      "interval_s": 7200,
+      "initial_age_s": 348,
+      "priority_weight": 1
+    },
+    {
+      "id": "P024",
+      "position_id": "P024",
+      "template_id": "S",
+      "interval_s": 7200,
+      "initial_age_s": 4801,
+      "priority_weight": 1
+    },
+    {
+      "id": "P025",
+      "position_id": "P025",
+      "template_id": "L",
+      "interval_s": 7200,
+      "initial_age_s": 765,
+      "priority_weight": 1
+    },
+    {
+      "id": "P026",
+      "position_id": "P026",
+      "template_id": "M",
+      "interval_s": 14400,
+      "initial_age_s": 11731,
+      "priority_weight": 1
+    },
+    {
+      "id": "P027",
+      "position_id": "P027",
+      "template_id": "S",
+      "interval_s": 10800,
+      "initial_age_s": 1003,
+      "priority_weight": 1
+    },
+    {
+      "id": "P028",
+      "position_id": "P028",
+      "template_id": "L",
+      "interval_s": 10800,
+      "initial_age_s": 7157,
+      "priority_weight": 1
+    },
+    {
+      "id": "P029",
+      "position_id": "P029",
+      "template_id": "M",
+      "interval_s": 10800,
+      "initial_age_s": 9309,
+      "priority_weight": 1
+    },
+    {
+      "id": "P030",
+      "position_id": "P030",
+      "template_id": "S",
+      "interval_s": 14400,
+      "initial_age_s": 783,
+      "priority_weight": 1
+    },
+    {
+      "id": "P031",
+      "position_id": "P031",
+      "template_id": "L",
+      "interval_s": 14400,
+      "initial_age_s": 2972,
+      "priority_weight": 1
+    },
+    {
+      "id": "P032",
+      "position_id": "P032",
+      "template_id": "M",
+      "interval_s": 10800,
+      "initial_age_s": 10220,
+      "priority_weight": 1
+    },
+    {
+      "id": "P033",
+      "position_id": "P033",
+      "template_id": "S",
+      "interval_s": 10800,
+      "initial_age_s": 0,
+      "priority_weight": 1
+    },
+    {
+      "id": "P034",
+      "position_id": "P034",
+      "template_id": "L",
+      "interval_s": 14400,
+      "initial_age_s": 2398,
+      "priority_weight": 1
+    },
+    {
+      "id": "P035",
+      "position_id": "P035",
+      "template_id": "M",
+      "interval_s": 7200,
+      "initial_age_s": 6976,
+      "priority_weight": 1
+    },
+    {
+      "id": "P036",
+      "position_id": "P036",
+      "template_id": "S",
+      "interval_s": 7200,
+      "initial_age_s": 4699,
+      "priority_weight": 1
+    },
+    {
+      "id": "P037",
+      "position_id": "P037",
+      "template_id": "L",
+      "interval_s": 7200,
+      "initial_age_s": 3544,
+      "priority_weight": 1
+    },
+    {
+      "id": "P038",
+      "position_id": "P038",
+      "template_id": "M",
+      "interval_s": 7200,
+      "initial_age_s": 4157,
+      "priority_weight": 1
+    },
+    {
+      "id": "P039",
+      "position_id": "P039",
+      "template_id": "S",
+      "interval_s": 7200,
+      "initial_age_s": 2891,
+      "priority_weight": 1
+    },
+    {
+      "id": "P040",
+      "position_id": "P040",
+      "template_id": "L",
+      "interval_s": 10800,
+      "initial_age_s": 3107,
+      "priority_weight": 1
+    },
+    {
+      "id": "P041",
+      "position_id": "P041",
+      "template_id": "M",
+      "interval_s": 10800,
+      "initial_age_s": 10192,
+      "priority_weight": 1
+    },
+    {
+      "id": "P042",
+      "position_id": "P042",
+      "template_id": "S",
+      "interval_s": 10800,
+      "initial_age_s": 1789,
+      "priority_weight": 1
+    },
+    {
+      "id": "P043",
+      "position_id": "P043",
+      "template_id": "L",
+      "interval_s": 14400,
+      "initial_age_s": 5394,
+      "priority_weight": 1
+    },
+    {
+      "id": "P044",
+      "position_id": "P044",
+      "template_id": "M",
+      "interval_s": 10800,
+      "initial_age_s": 5303,
+      "priority_weight": 1
+    },
+    {
+      "id": "P045",
+      "position_id": "P045",
+      "template_id": "S",
+      "interval_s": 10800,
+      "initial_age_s": 6041,
+      "priority_weight": 1
+    },
+    {
+      "id": "P046",
+      "position_id": "P046",
+      "template_id": "L",
+      "interval_s": 10800,
+      "initial_age_s": 1446,
+      "priority_weight": 1
+    },
+    {
+      "id": "P047",
+      "position_id": "P047",
+      "template_id": "M",
+      "interval_s": 14400,
+      "initial_age_s": 13988,
+      "priority_weight": 1
+    },
+    {
+      "id": "P048",
+      "position_id": "P048",
+      "template_id": "S",
+      "interval_s": 7200,
+      "initial_age_s": 1436,
+      "priority_weight": 1
+    },
+    {
+      "id": "P049",
+      "position_id": "P049",
+      "template_id": "L",
+      "interval_s": 10800,
+      "initial_age_s": 4868,
+      "priority_weight": 1
+    },
+    {
+      "id": "P050",
+      "position_id": "P050",
+      "template_id": "M",
+      "interval_s": 10800,
+      "initial_age_s": 8242,
+      "priority_weight": 1
+    },
+    {
+      "id": "P051",
+      "position_id": "P051",
+      "template_id": "S",
+      "interval_s": 14400,
+      "initial_age_s": 8679,
+      "priority_weight": 1
+    },
+    {
+      "id": "P052",
+      "position_id": "P052",
+      "template_id": "L",
+      "interval_s": 7200,
+      "initial_age_s": 4363,
+      "priority_weight": 1
+    },
+    {
+      "id": "P053",
+      "position_id": "P053",
+      "template_id": "M",
+      "interval_s": 10800,
+      "initial_age_s": 10703,
+      "priority_weight": 1
+    },
+    {
+      "id": "P054",
+      "position_id": "P054",
+      "template_id": "S",
+      "interval_s": 14400,
+      "initial_age_s": 524,
+      "priority_weight": 1
+    },
+    {
+      "id": "P055",
+      "position_id": "P055",
+      "template_id": "L",
+      "interval_s": 14400,
+      "initial_age_s": 6446,
+      "priority_weight": 1
+    },
+    {
+      "id": "P056",
+      "position_id": "P056",
+      "template_id": "M",
+      "interval_s": 10800,
+      "initial_age_s": 525,
+      "priority_weight": 1
+    },
+    {
+      "id": "P057",
+      "position_id": "P057",
+      "template_id": "S",
+      "interval_s": 14400,
+      "initial_age_s": 11267,
+      "priority_weight": 1
+    },
+    {
+      "id": "P058",
+      "position_id": "P058",
+      "template_id": "L",
+      "interval_s": 7200,
+      "initial_age_s": 2860,
+      "priority_weight": 1
+    },
+    {
+      "id": "P059",
+      "position_id": "P059",
+      "template_id": "M",
+      "interval_s": 14400,
+      "initial_age_s": 5995,
+      "priority_weight": 1
+    },
+    {
+      "id": "P060",
+      "position_id": "P060",
+      "template_id": "S",
+      "interval_s": 7200,
+      "initial_age_s": 2124,
+      "priority_weight": 1
+    },
+    {
+      "id": "P061",
+      "position_id": "P061",
+      "template_id": "L",
+      "interval_s": 7200,
+      "initial_age_s": 4057,
+      "priority_weight": 1
+    },
+    {
+      "id": "P062",
+      "position_id": "P062",
+      "template_id": "M",
+      "interval_s": 7200,
+      "initial_age_s": 2833,
+      "priority_weight": 1
+    },
+    {
+      "id": "P063",
+      "position_id": "P063",
+      "template_id": "S",
+      "interval_s": 7200,
+      "initial_age_s": 5573,
+      "priority_weight": 1
+    },
+    {
+      "id": "P064",
+      "position_id": "P064",
+      "template_id": "L",
+      "interval_s": 7200,
+      "initial_age_s": 2391,
+      "priority_weight": 1
+    },
+    {
+      "id": "P065",
+      "position_id": "P065",
+      "template_id": "M",
+      "interval_s": 7200,
+      "initial_age_s": 5454,
+      "priority_weight": 1
+    },
+    {
+      "id": "P066",
+      "position_id": "P066",
+      "template_id": "S",
+      "interval_s": 10800,
+      "initial_age_s": 6958,
+      "priority_weight": 1
+    },
+    {
+      "id": "P067",
+      "position_id": "P067",
+      "template_id": "L",
+      "interval_s": 10800,
+      "initial_age_s": 7522,
+      "priority_weight": 1
+    },
+    {
+      "id": "P068",
+      "position_id": "P068",
+      "template_id": "M",
+      "interval_s": 14400,
+      "initial_age_s": 10773,
+      "priority_weight": 1
+    },
+    {
+      "id": "P069",
+      "position_id": "P069",
+      "template_id": "S",
+      "interval_s": 10800,
+      "initial_age_s": 4124,
+      "priority_weight": 1
+    },
+    {
+      "id": "P070",
+      "position_id": "P070",
+      "template_id": "L",
+      "interval_s": 14400,
+      "initial_age_s": 9575,
+      "priority_weight": 1
+    },
+    {
+      "id": "P071",
+      "position_id": "P071",
+      "template_id": "M",
+      "interval_s": 10800,
+      "initial_age_s": 4785,
+      "priority_weight": 1
+    },
+    {
+      "id": "P072",
+      "position_id": "P072",
+      "template_id": "S",
+      "interval_s": 10800,
+      "initial_age_s": 3218,
+      "priority_weight": 1
+    },
+    {
+      "id": "P073",
+      "position_id": "P073",
+      "template_id": "L",
+      "interval_s": 14400,
+      "initial_age_s": 10198,
+      "priority_weight": 1
+    },
+    {
+      "id": "P074",
+      "position_id": "P074",
+      "template_id": "M",
+      "interval_s": 14400,
+      "initial_age_s": 10256,
+      "priority_weight": 1
+    },
+    {
+      "id": "P075",
+      "position_id": "P075",
+      "template_id": "S",
+      "interval_s": 7200,
+      "initial_age_s": 7070,
+      "priority_weight": 1
+    },
+    {
+      "id": "P076",
+      "position_id": "P076",
+      "template_id": "L",
+      "interval_s": 10800,
+      "initial_age_s": 7651,
+      "priority_weight": 1
+    },
+    {
+      "id": "P077",
+      "position_id": "P077",
+      "template_id": "M",
+      "interval_s": 10800,
+      "initial_age_s": 4175,
+      "priority_weight": 1
+    },
+    {
+      "id": "P078",
+      "position_id": "P078",
+      "template_id": "S",
+      "interval_s": 10800,
+      "initial_age_s": 8362,
+      "priority_weight": 1
+    },
+    {
+      "id": "P079",
+      "position_id": "P079",
+      "template_id": "L",
+      "interval_s": 10800,
+      "initial_age_s": 323,
+      "priority_weight": 1
+    },
+    {
+      "id": "P080",
+      "position_id": "P080",
+      "template_id": "M",
+      "interval_s": 14400,
+      "initial_age_s": 980,
+      "priority_weight": 1
+    },
+    {
+      "id": "P081",
+      "position_id": "P081",
+      "template_id": "S",
+      "interval_s": 10800,
+      "initial_age_s": 719,
+      "priority_weight": 1
+    },
+    {
+      "id": "P082",
+      "position_id": "P082",
+      "template_id": "L",
+      "interval_s": 10800,
+      "initial_age_s": 3996,
+      "priority_weight": 1
+    },
+    {
+      "id": "P083",
+      "position_id": "P083",
+      "template_id": "M",
+      "interval_s": 7200,
+      "initial_age_s": 2500,
+      "priority_weight": 1
+    },
+    {
+      "id": "P084",
+      "position_id": "P084",
+      "template_id": "S",
+      "interval_s": 7200,
+      "initial_age_s": 6059,
+      "priority_weight": 1
+    },
+    {
+      "id": "P085",
+      "position_id": "P085",
+      "template_id": "L",
+      "interval_s": 10800,
+      "initial_age_s": 1396,
+      "priority_weight": 1
+    },
+    {
+      "id": "P086",
+      "position_id": "P086",
+      "template_id": "M",
+      "interval_s": 14400,
+      "initial_age_s": 3397,
+      "priority_weight": 1
+    },
+    {
+      "id": "P087",
+      "position_id": "P087",
+      "template_id": "S",
+      "interval_s": 10800,
+      "initial_age_s": 10104,
+      "priority_weight": 1
+    },
+    {
+      "id": "P088",
+      "position_id": "P088",
+      "template_id": "L",
+      "interval_s": 14400,
+      "initial_age_s": 3429,
+      "priority_weight": 1
+    },
+    {
+      "id": "P089",
+      "position_id": "P089",
+      "template_id": "M",
+      "interval_s": 7200,
+      "initial_age_s": 1590,
+      "priority_weight": 1
+    },
+    {
+      "id": "P090",
+      "position_id": "P090",
+      "template_id": "S",
+      "interval_s": 7200,
+      "initial_age_s": 1947,
+      "priority_weight": 1
+    },
+    {
+      "id": "P091",
+      "position_id": "P091",
+      "template_id": "L",
+      "interval_s": 7200,
+      "initial_age_s": 4770,
+      "priority_weight": 1
+    },
+    {
+      "id": "P092",
+      "position_id": "P092",
+      "template_id": "M",
+      "interval_s": 7200,
+      "initial_age_s": 1473,
+      "priority_weight": 1
+    },
+    {
+      "id": "P093",
+      "position_id": "P093",
+      "template_id": "S",
+      "interval_s": 14400,
+      "initial_age_s": 3002,
+      "priority_weight": 1
+    },
+    {
+      "id": "P094",
+      "position_id": "P094",
+      "template_id": "L",
+      "interval_s": 14400,
+      "initial_age_s": 8703,
+      "priority_weight": 1
+    },
+    {
+      "id": "P095",
+      "position_id": "P095",
+      "template_id": "M",
+      "interval_s": 10800,
+      "initial_age_s": 7168,
+      "priority_weight": 1
+    },
+    {
+      "id": "P096",
+      "position_id": "P096",
+      "template_id": "S",
+      "interval_s": 14400,
+      "initial_age_s": 13689,
+      "priority_weight": 1
+    }
+  ],
+  "clock": {
+    "evaluation_start_s": 86400,
+    "evaluation_end_s": 345600,
+    "recovery_end_s": 349200
+  },
+  "metadata": {
+    "crs": "EPSG:32650",
+    "demand_seed": 303,
+    "observation_units": 96,
+    "initial_fleet_is_overlay_capacity": 24,
+    "default_charge_setting": "C0",
+    "weather_external": "processed/weather/ifs_YYYY.csv",
+    "complete_flight_connections": true,
+    "permission_scope": "research geometry, not real flight approval",
+    "position_evidence": "processed/geography/observation_units_192.csv",
+    "requirement_origin": "research scenario assumptions"
+  }
+}

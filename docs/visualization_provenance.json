@@ -1,0 +1,50 @@
+{
+  "recordings": [
+    {
+      "file": "docs/single-base.gif",
+      "sha256": "ae4fe598e61ff77ee7c76f9cae826bcfed26bfef45a1e81a6b9aa9e37edec61f",
+      "network_id": "legacy_24",
+      "fleet_size": 4,
+      "weather": "historical",
+      "historical_block": "2025-04-04",
+      "recovery_policy": "HOME",
+      "operating_hours": 6,
+      "warmup_hours": 0,
+      "recovery_hours": 1,
+      "initial_age_mode": "due",
+      "recorded_simulation_seconds": [
+        10800,
+        12600
+      ],
+      "screenshot_interval_s": 30,
+      "gif_frame_duration_ms": 100,
+      "frames": 61,
+      "browser_validation": "Both displayed AoI values finite and agree with independent backend frames to display precision at every captured frame.",
+      "method": "Actual localhost browser screenshots; only global palette quantisation and GIF encoding."
+    },
+    {
+      "file": "docs/multi-base.gif",
+      "sha256": "e37bb3fadf71329ecc10bbb37f7783c33a0d095748d19c1beada1c962cf68e87",
+      "network_id": "pingtan_96",
+      "fleet_size": 12,
+      "weather": "historical",
+      "historical_block": "2025-04-04",
+      "recovery_policy": "NEAR",
+      "operating_hours": 6,
+      "warmup_hours": 0,
+      "recovery_hours": 1,
+      "initial_age_mode": "due",
+      "recorded_simulation_seconds": [
+        0,
+        1800
+      ],
+      "screenshot_interval_s": 30,
+      "gif_frame_duration_ms": 100,
+      "frames": 61,
+      "browser_validation": "Both displayed AoI values finite and agree with independent backend frames to display precision at every captured frame.",
+      "method": "Actual localhost browser screenshots; only global palette quantisation and GIF encoding."
+    }
+  ],
+  "scope": "Short interface demonstrations using historical wind; these initial ages and horizons are not the full manuscript evaluation protocol.",
+  "map": "Offline OSM vector geometry; see map_provenance.json."
+}

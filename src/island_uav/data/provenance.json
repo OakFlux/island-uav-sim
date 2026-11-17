@@ -1,87 +1,87 @@
 {
-  "schema": "island-uav-public-data-1",
-  "prepared_date": "2026-11-15",
-  "files": [
-    {
-      "file": "assets.csv",
-      "original_source": "data/study_v2/primary/scenarios/layouts/site/assets.csv",
-      "sha256": "a8c904b25d9757093cf7d2d2cf2e3bb0e1cd75c904778dcd573cab254f783b8f",
-      "transformation": "byte-identical copy"
+  "schema_version": 2,
+  "scope": "Prepared Pingtan research scenarios plus one 97-hour historical wind block per product. Task requirements, aircraft parameters, base resources and candidate facilities are research assumptions, not an inventory or certified operating specification.",
+  "coordinate_system": "EPSG:32650",
+  "source_files": {
+    "src/island_uav/data/networks/legacy_24_seed101.json": {
+      "research_source": "validation/legacy/legacy_24_seed101.json",
+      "sha256": "a56b62e3b895a83f4da2ff0b5334665851f752609d5e22dd8f857c30066b9557"
     },
-    {
-      "file": "legs.csv",
-      "original_source": "data/study_v2/primary/scenarios/layouts/site/undirected_legs.csv",
-      "sha256": "f17df83787850ebfa481f1dbf66a3288a31ab5f9072e7793acf0c0fa6fb69c80",
-      "transformation": "byte-identical copy"
+    "src/island_uav/data/networks/legacy_24_seed202.json": {
+      "research_source": "validation/legacy/legacy_24_seed202.json",
+      "sha256": "bbcb2480950fcbb454049eb5d39f4833826d38497d30df3e29500b33caf7150a"
     },
-    {
-      "file": "bases.csv",
-      "original_source": "data/study_v2/primary/scenarios/bases.csv",
-      "sha256": "617e3fbab5379c78a68452e8f59b5097ac01c1f35579feeb7c2b7c2ce4d73c2c",
-      "transformation": "byte-identical copy"
+    "src/island_uav/data/networks/legacy_24_seed303.json": {
+      "research_source": "validation/legacy/legacy_24_seed303.json",
+      "sha256": "914443547bc4bf1467094684c932faaa6a8290abdbc8354deb43cf8762168858"
     },
-    {
-      "file": "profiles.csv",
-      "original_source": "data/study_v2/primary/scenarios/aircraft_profiles.csv",
-      "sha256": "64b93199bcd46ce1710f30d9dad24fcb2d5b2f18e71c57d608d7932878771c24",
-      "transformation": "byte-identical copy"
+    "src/island_uav/data/networks/pingtan_48_seed101.json": {
+      "research_source": "data/scenarios/pingtan_48_seed101.json",
+      "sha256": "a55aaec910d120297e4f235a82d2b9e1241604ad2b8099d55bee3295cf9e3fdc"
     },
-    {
-      "file": "templates.csv",
-      "original_source": "data/study_v2/primary/scenarios/inspection_units.csv",
-      "sha256": "78f3176b14ec580ab1d182af12d691719968354998ec2115f1faa14bbc6aaef9",
-      "transformation": "byte-identical copy"
+    "src/island_uav/data/networks/pingtan_48_seed202.json": {
+      "research_source": "data/scenarios/pingtan_48_seed202.json",
+      "sha256": "5ae9957de40d45dd1fe9558f23d4255f8d0b36ff9c26e5695333d67ba71ade86"
     },
-    {
-      "file": "historical_wind.csv",
-      "original_source": "data/study_v2/primary/scenarios/weather/PT-20250404.csv",
-      "sha256": "759280b09e36ab2b01a7bbd2b63a6acca1fcf2b394a5f86b3246b7bc37b59f0c",
-      "transformation": "byte-identical copy"
+    "src/island_uav/data/networks/pingtan_48_seed303.json": {
+      "research_source": "data/scenarios/pingtan_48_seed303.json",
+      "sha256": "72a7aa1370a33414220d4b2669fa0973d2bf9c077e8ba72a974acf3ccb3f634f"
     },
-    {
-      "file": "demand_101.csv",
-      "original_source": "data/study_v2/primary/scenarios/layouts/site/demand_periodic_mixed_101.csv",
-      "sha256": "a50aaf086b32d1260c6918fcc314a9b7a423caf897f28e2cfc748dc11f3ce659",
-      "transformation": "byte-identical copy"
+    "src/island_uav/data/networks/pingtan_96_seed101.json": {
+      "research_source": "data/scenarios/pingtan_96_seed101.json",
+      "sha256": "ea9d93d4d3472207c7e899007423cb24e840039ecb0b889132be3dd1f3db2a9d"
     },
-    {
-      "file": "demand_202.csv",
-      "original_source": "data/study_v2/primary/scenarios/layouts/site/demand_periodic_mixed_202.csv",
-      "sha256": "8f92eb8c79a5e170da0b3056eac19047384fc30d6d0441f3133abe52139a01e3",
-      "transformation": "byte-identical copy"
+    "src/island_uav/data/networks/pingtan_96_seed202.json": {
+      "research_source": "data/scenarios/pingtan_96_seed202.json",
+      "sha256": "85563df8ccf083517078fa881eb319eedbeb9c2af693f862dee839999f03c28b"
     },
-    {
-      "file": "demand_303.csv",
-      "original_source": "data/study_v2/primary/scenarios/layouts/site/demand_periodic_mixed_303.csv",
-      "sha256": "42db4a87fea77b623adf80a870574bb31dd291f302ceffbbc51cca371f3f8808",
-      "transformation": "byte-identical copy"
+    "src/island_uav/data/networks/pingtan_96_seed303.json": {
+      "research_source": "data/scenarios/pingtan_96_seed303.json",
+      "sha256": "150dabf465210cfed352c18c58a0e4762cc9ea7dad442d4d26047f783124e50b"
+    },
+    "src/island_uav/data/networks/pingtan_192_seed101.json": {
+      "research_source": "data/scenarios/pingtan_192_seed101.json",
+      "sha256": "1788481bc2fc382a323bdc2ebf823e06bbbc583dbd8aedc6777a5fe6691c2bec"
+    },
+    "src/island_uav/data/networks/pingtan_192_seed202.json": {
+      "research_source": "data/scenarios/pingtan_192_seed202.json",
+      "sha256": "97d0675c7775795eeb689c67e31636f9be173b2aeaeffcf7721a4a8e472ccf1e"
+    },
+    "src/island_uav/data/networks/pingtan_192_seed303.json": {
+      "research_source": "data/scenarios/pingtan_192_seed303.json",
+      "sha256": "059e5314692ab6d89d09e663bbe160f696eebac2d9f5def1e8d9b4943a2ad4ee"
+    },
+    "src/island_uav/data/weather/wind_coordinate_frames.json": {
+      "research_source": "data/processed/weather/wind_coordinate_frames.json",
+      "sha256": "defa9766d99e726d26f963a74b314996aca04825a7013d6f1564600368d1580f"
+    },
+    "src/island_uav/data/references/compact_input.json": {
+      "research_source": "results/formal/E1B-B04-W20250404-S101/input.json",
+      "sha256": "45a89027c6a2536d958688312f04ec293da34ebef72ee6e2249f41c0735a0df5"
+    },
+    "src/island_uav/data/references/network_input.json": {
+      "research_source": "results/formal/E2-M04-W20250404-S101/input.json",
+      "sha256": "9f59ea3deb66b4c56f0301e147a2464614e8793e8b1f7f6c602fc191c5177a72"
     }
-  ],
-  "development_weather_source_sha256": {
-    "scenarios/weather/development/block_1.csv": "0d0f10ec9e19b283c64ee7b0026cc87e21aa2ef3eefa323987e846acb77dad7d",
-    "scenarios/weather/development/block_2.csv": "ec952ceef70d4820a70a0653b9ba18ddb292ea606bd1e2fab2603d4d1f70e309"
   },
-  "core_sha256": {
-    "__init__.py": "573bbc781ce4e0c31f158401b86a71c994eee27b63a084a0dc2621787d5815b6",
-    "domain.py": "26708fdd626dd0eeef67f7ef332c5172991ab0c2842cbc2101da9fc9c7ac9481",
-    "physics.py": "e999998c1508234c481e665bc59408a5e33f35192a4671da620bf573d8cf8810",
-    "engine.py": "a5a8ad31cb7343d18aef09ec275300fe1d5f09453a55099a0e0079b0cc929b66",
-    "ledger.py": "015f8411366d1414a812e3218fed6527bc0252aa82fe8c756993ea2d1e6dae13",
-    "audit.py": "25a86ffd778a610ea226e414548e766ef38bccf1129fffdd8e4ebd03970ff18c",
-    "policies.py": "9fa93075320e395cc089fe9b3005abf92ea613f81b8270bf1ebf5549836946ff",
-    "inputs.py": "53ab83f102ff1d4fbf687fbe7c37a2e0b817a2f01585cdb0a42273eb52150040"
+  "licenses": {
+    "code": "MIT",
+    "OSM_derived_geography": "Open Database License 1.0; © OpenStreetMap contributors",
+    "historical_weather": "Open-Meteo Historical Weather API / Historical Forecast API; CC BY 4.0; underlying ERA5 and ECMWF IFS products retain their source attribution."
   },
-  "historical_weather": {
-    "start_utc": "2025-04-04T00:00:00Z",
-    "hours": 97,
-    "source": "Open-Meteo/ECMWF ERA5 regional 10m wind proxy",
-    "license": "CC-BY-4.0",
-    "source_url": "https://open-meteo.com/en/docs/historical-weather-api"
+  "sources": {
+    "OSM": "https://www.openstreetmap.org/copyright",
+    "Geofabrik": "https://download.geofabrik.de/asia/china.html",
+    "Open-Meteo": "https://open-meteo.com/en/docs/historical-weather-api",
+    "Open-Meteo-IFS": "https://open-meteo.com/en/docs/historical-forecast-api"
   },
-  "geography": {
-    "source": "OpenStreetMap contributors / Geofabrik Fujian extract, 2026-01-01 snapshot",
-    "license": "ODbL-1.0",
-    "source_url": "https://download.geofabrik.de/asia/china/fujian.html",
-    "note": "8 mapped anchors and 16 explicitly inferred stations; inspection procedures, demand and base are synthetic scenario assumptions."
+  "wind": "True geographic east/north in the bundled historical block is rotated to projected grid axes at each weather product representative using the frozen meridian-convergence table. Synthetic demo components are already in grid axes.",
+  "reliability": "Opening spells precomputed from 2023–2024 by zone/template; actual evaluation weather begins 4 Apr 2025. The full two-year raw weather archive is not bundled.",
+  "display_coordinates": "Prepared by pyproj 3.7.2 from the exact metric positions; display only.",
+  "physical_core_sha256": {
+    "__init__.py": "9ff8ac364ab3433d6442ace1ffbf0a1430db32518fe06d00fd770f2dda90843c",
+    "engine.py": "3ed55d6e6b876f7600345a30cb98e353a17750a6f763c7ced32dabdb95e29c6e",
+    "physics.py": "0f1cd8532be6437100fd93dc330f6f346047e98afcbb34c1cfc7bea7fc2a94cd",
+    "weather.py": "4acce6afc0f2375204add2451255a0bc8bd99255b9b2984733c713d3404d66d7"
   }
 }

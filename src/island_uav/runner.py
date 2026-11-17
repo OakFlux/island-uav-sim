@@ -1,286 +1,276 @@
-"""Portable configuration and observation adapter around the frozen study engine.
+"""Portable assembly, execution and independent accounting of prepared island cases.
 
-The execution, dispatch and independent audit modules are unchanged. Extra
-position fields are observations for playback and never enter a policy.
+The public adapter changes inputs, never the physical event executor. The model
+uses metres/seconds/watts/watt-hours; browser coordinates are display metadata.
 """
 from __future__ import annotations
 
-import csv
+import copy
 import hashlib
-import io
 import json
 import math
-from dataclasses import asdict
-from datetime import datetime, timedelta
+import time
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any
 
-from island_sim.audit import audit
-from island_sim.domain import (
-    AircraftProfile, BatchTask, FleetMember, PeriodicStream, RunConfig,
-    Scenario, Station, UnitSpec, WeatherInterval,
-)
-from island_sim.engine import Simulation
-from island_sim.inputs import _profile, _templates
-from island_sim.ledger import EventLedger, read_events
-from island_sim.policies import DispatchPolicy, WeatherReliability
+from island_sim_v5 import simulate
+from .core.delivery import evaluate_delivery
+from .core.delivery_audit import audit_delivery
+from .core.independent_audit import audit_result
+from .core.wind_frames import rotate_weather_to_grid
 
-DATA_DIR = Path(__file__).resolve().parent / "data"
-SCHEMA = "island-uav-public-run-1"
+DATA = Path(__file__).resolve().parent / "data"
+SCHEMA = "island-uav-public-run-2"
+NETWORKS = ("legacy_24", "pingtan_48", "pingtan_96", "pingtan_192")
 
 
-def default_config() -> dict[str, Any]:
-    """A short, active demonstration; use paper_case.json for the paper reference case."""
-    return {
-        "scenario": "pingtan", "fleet_size": 4, "targets_per_sortie": 2,
-        "policy": "B2", "charge_ports": 2, "port_input_w": 240,
-        "duration_hours": 6, "warmup_hours": 0, "recovery_hours": 1,
-        "weather": "synthetic", "historical_start_hour": 24,
-        "weather_arrangement": "variable", "task_seed": 101,
-        "initial_age_mode": "due", "execution_mode": "full",
-    }
+def _read(path: Path) -> Any:
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
-def load_config(config: str | Path | Mapping[str, Any] | None = None) -> dict[str, Any]:
-    """Read a JSON object, reject unknown keys, and check finite limits."""
-    value = default_config()
+def _write(path: Path, value: Any) -> None:
+    path.write_text(json.dumps(value, ensure_ascii=False, indent=2, allow_nan=False) + "\n", encoding="utf-8")
+
+
+def _hash(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def default_config() -> dict:
+    """An active six-hour demonstration, not a formal paper experiment."""
+    return dict(network_id="pingtan_96", fleet_size=12, targets_per_sortie=2,
+                charge_ports=1, port_input_w=240, policy="B2", recovery_policy="NEAR",
+                weather="synthetic", duration_hours=6, warmup_hours=0,
+                recovery_hours=1, task_seed=101, historical_block="2025-04-04",
+                historical_start_hour=0, weather_arrangement="variable",
+                initial_age_mode="due", execution_mode="full")
+
+
+def load_config(config: dict | str | Path | None = None) -> dict:
+    """Load and validate the single public configuration schema.
+
+    Unknown keys and booleans used as numbers are rejected. Historical input is
+    restricted to the bundled 97-hour block; no network download occurs.
+    """
     if config is None:
-        incoming: dict = {}
-    elif isinstance(config, Mapping):
-        incoming = dict(config)
+        supplied = {}
+    elif isinstance(config, (str, Path)):
+        supplied = _read(Path(config))
+    elif isinstance(config, dict):
+        supplied = copy.deepcopy(config)
     else:
-        incoming = json.loads(Path(config).read_text(encoding="utf-8"))
-    if not isinstance(incoming, dict):
-        raise ValueError("Configuration must be a JSON object.")
-    unknown = set(incoming) - set(value)
+        raise ValueError("Configuration must be a JSON object or its file path")
+    if not isinstance(supplied, dict):
+        raise ValueError("Configuration must be a JSON object")
+    cfg = default_config()
+    unknown = set(supplied) - set(cfg)
     if unknown:
         raise ValueError("Unknown configuration keys: " + ", ".join(sorted(unknown)))
-    value.update(incoming)
-    choices = {
-        "scenario": {"pingtan"}, "fleet_size": {2, 4, 8},
-        "targets_per_sortie": {1, 2}, "policy": {"B0", "B2"},
-        "charge_ports": {1, 2}, "weather": {"synthetic", "historical"},
-        "task_seed": {101, 202, 303}, "initial_age_mode": {"due", "paper"},
-        "weather_arrangement": {"variable", "continuous", "fragmented"},
-        "execution_mode": {"full", "instant_charge", "accumulating"},
-    }
-    integer_choices = {"fleet_size", "targets_per_sortie", "charge_ports", "task_seed"}
+    cfg.update(supplied)
+    choices = {"network_id": NETWORKS, "policy": ("B0", "B2"),
+               "recovery_policy": ("HOME", "NEAR", "QUEUE"),
+               "weather": ("synthetic", "historical"),
+               "weather_arrangement": ("variable", "continuous", "fragmented"),
+               "initial_age_mode": ("due", "paper"),
+               "execution_mode": ("full", "instant_charge", "accumulating")}
     for key, allowed in choices.items():
-        item = value[key]
-        valid_type = type(item) is int if key in integer_choices else isinstance(item, str)
-        if not valid_type or item not in allowed:
-            raise ValueError(f"{key} must be one of {sorted(allowed)}")
-    for key, low, high in (
-        ("port_input_w", 1, 2000), ("duration_hours", 0.05, 72),
-        ("warmup_hours", 0, 24), ("recovery_hours", 0.05, 2),
-        ("historical_start_hour", 0, 96),
-    ):
-        item = value[key]
-        if isinstance(item, bool) or not isinstance(item, (int, float)) or not math.isfinite(item):
-            raise ValueError(f"{key} must be a finite number.")
-        if not low <= item <= high:
-            raise ValueError(f"{key} must be between {low} and {high}.")
-    if value["weather"] == "historical":
-        hours = sum(value[key] for key in (
-            "historical_start_hour", "warmup_hours", "duration_hours", "recovery_hours"))
-        if hours > 97:
-            raise ValueError("Historical selection exceeds the bundled 97-hour wind block.")
-    return value
+        if cfg[key] not in allowed:
+            raise ValueError(f"{key} must be one of {', '.join(allowed)}")
+    for key in ("fleet_size", "targets_per_sortie", "charge_ports", "task_seed", "historical_start_hour"):
+        if type(cfg[key]) is not int:
+            raise ValueError(f"{key} must be an integer")
+    allowed_fleet = (2, 4, 8) if cfg["network_id"] == "legacy_24" else (6, 12, 24)
+    if cfg["fleet_size"] not in allowed_fleet:
+        raise ValueError(f"fleet_size for {cfg['network_id']} must be {allowed_fleet}")
+    if cfg["targets_per_sortie"] not in (1, 2):
+        raise ValueError("targets_per_sortie must be 1 or 2")
+    if cfg["charge_ports"] not in (1, 2):
+        raise ValueError("charge_ports must be 1 or 2 per base")
+    if cfg["task_seed"] not in (101, 202, 303):
+        raise ValueError("task_seed must be 101, 202 or 303")
+    ranges = {"port_input_w": (1, 2000), "duration_hours": (1 / 60, 72),
+              "warmup_hours": (0, 24), "recovery_hours": (0, 4)}
+    for key, (low, high) in ranges.items():
+        value = cfg[key]
+        if type(value) not in (int, float) or not math.isfinite(value) or not low <= value <= high:
+            raise ValueError(f"{key} must be a finite number between {low:g} and {high:g}")
+    if not 0 <= cfg["historical_start_hour"] < 97:
+        raise ValueError("historical_start_hour must be between 0 and 96")
+    if cfg["historical_block"] != "2025-04-04":
+        raise ValueError("The bundled historical block starts on 2025-04-04")
+    if cfg["weather"] == "historical":
+        stop = sum(cfg[k] for k in ("warmup_hours", "duration_hours", "recovery_hours"))
+        if cfg["historical_start_hour"] + stop > 97 + 1e-9:
+            raise ValueError("Historical simulation exceeds the bundled 97-hour block")
+        if cfg["weather_arrangement"] != "variable":
+            raise ValueError("Historical weather must retain weather_arrangement='variable'")
+    return cfg
 
 
-def _rows(name: str) -> list[dict[str, str]]:
-    with (DATA_DIR / name).open(encoding="utf-8", newline="") as stream:
-        return list(csv.DictReader(stream))
+validate_config = load_config
 
 
-def _json(name: str) -> dict:
-    return json.loads((DATA_DIR / name).read_text(encoding="utf-8"))
-
-
-def _digest() -> str:
-    files = {p.name: hashlib.sha256(p.read_bytes()).hexdigest()
-             for p in sorted(DATA_DIR.iterdir()) if p.suffix in {".csv", ".json"}}
-    return hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest()
-
-
-def _weather(config: dict, end: float) -> tuple[WeatherInterval, ...]:
-    intervals = []
-    if config["weather"] == "historical":
-        origin = datetime.fromisoformat("2025-04-04T00:00:00+00:00") + timedelta(
-            hours=config["historical_start_hour"])
-        for row in _rows("historical_wind.csv"):
-            start = (datetime.fromisoformat(row["start_utc"].replace("Z", "+00:00")) - origin).total_seconds()
-            finish = (datetime.fromisoformat(row["end_utc"].replace("Z", "+00:00")) - origin).total_seconds()
-            visible = (datetime.fromisoformat(row["visible_at_utc"].replace("Z", "+00:00")) - origin).total_seconds()
-            if finish > 0 and start < end:
-                intervals.append(WeatherInterval(max(0.0, start), min(end, finish), max(0.0, visible),
-                                                  float(row["wind_east_mps"]), float(row["wind_north_mps"])))
-    else:
-        arrangements = {
-            "continuous": [(360.0, 5.0), (360.0, 11.0)],
-            "fragmented": [(120.0, 5.0), (120.0, 11.0)],
-            "variable": [(1200.0, 5.0), (600.0, 9.5), (900.0, 6.0),
-                         (300.0, 11.0), (600.0, 7.5)],
-        }
-        pattern = arrangements[config["weather_arrangement"]]
-        cursor = 0.0
-        while cursor < end:
-            for duration, speed in pattern:
-                finish = min(end, cursor + duration)
-                intervals.append(WeatherInterval(cursor, finish, cursor, speed * 0.6, -speed * 0.8))
-                cursor = finish
-                if cursor >= end:
-                    break
-    if not intervals or intervals[0].start_s != 0 or intervals[-1].end_s < end:
-        raise ValueError("Weather input does not cover the simulation horizon.")
-    return tuple(intervals)
-
-
-def build_scenario(config: Mapping[str, Any] | str | Path | None = None) -> Scenario:
-    config = load_config(config)
-    assets = _rows("assets.csv")
-    base = _rows("bases.csv")[0]
-    positions = {row["asset_id"]: (float(row["x_m"]), float(row["y_m"])) for row in assets}
-    positions[base["base_id"]] = (float(base["x_m"]), float(base["y_m"]))
-    legs = frozenset(tuple(sorted((r["node_a"], r["node_b"]))) for r in _rows("legs.csv")
-                     if r["allowed_for_task_level_model"].lower() == "true")
-    profiles = {r["profile_id"]: _profile(r) for r in _rows("profiles.csv")}
-    templates = _templates(_rows("templates.csv"))
-    fleet = tuple(FleetMember(f"U{i+1:02d}", "LGT" if i % 2 == 0 else "GEN", 1.0)
-                  for i in range(config["fleet_size"]))
-    station = Station("PUBLIC", 8, 1, config["charge_ports"], float(config["port_input_w"]),
-                      0.9, 1.0, 30.0, 30.0, 60.0, 240.0)
-    streams = []
-    for row in _rows(f"demand_{config['task_seed']}.csv"):
-        interval = float(row["target_interval_s"])
-        initial = float(row["initial_age_s"]) if config["initial_age_mode"] == "paper" else interval
-        streams.append(PeriodicStream(row["task_stream_id"], row["asset_id"], row["template_id"],
-                                      interval, initial, float(row["priority_weight"])))
-    warmup = config["warmup_hours"] * 3600.0
-    end = warmup + config["duration_hours"] * 3600.0
-    recovery = end + config["recovery_hours"] * 3600.0
-    scenario_id = (f"pingtan-{config['weather']}-F{config['fleet_size']}-K{config['targets_per_sortie']}"
-                   f"-C{config['charge_ports']}-{config['policy']}")
-    return Scenario(
-        scenario_id=scenario_id, business="periodic", base_id=base["base_id"],
-        positions=positions, allowed_legs=legs, profiles=profiles, templates=templates,
-        fleet=fleet, station=station, weather=_weather(config, recovery), batch_tasks=(),
-        periodic_streams=tuple(streams), evaluation_start_s=warmup,
-        evaluation_end_s=end, recovery_end_s=recovery,
-        provenance={"inputs_sha256": _digest(), "coordinate_system": "EPSG:32650",
-                    "weather_role": "historical regional proxy" if config["weather"] == "historical"
-                    else "controlled synthetic illustration", "initial_age_mode": config["initial_age_mode"]},
-    )
-
-
-def scenario_metadata(scenario: Scenario) -> dict:
-    """Geographic display metadata; physical travel uses projected meters."""
-    sites = []
-    demand = {stream.asset_id: stream for stream in scenario.periodic_streams}
-    for row in _rows("assets.csv"):
-        stream = demand[row["asset_id"]]
-        sites.append({
-            "id": row["asset_id"], "asset_id": row["asset_id"],
-            "lon": float(row["longitude"]), "lat": float(row["latitude"]),
-            "x_m": float(row["x_m"]), "y_m": float(row["y_m"]),
-            "evidence": row["location_evidence"], "template_id": stream.template_id,
-            "target_interval_s": stream.target_interval_s, "initial_age_s": stream.initial_age_s,
-        })
-    base = _rows("bases.csv")[0]
-    return {"sites": sites, "base": {"id": scenario.base_id, "lon": float(base["longitude"]),
-                                       "lat": float(base["latitude"]), "x_m": float(base["x_m"]),
-                                       "y_m": float(base["y_m"])},
-            "crs": "EPSG:32650", "historical_origin_utc": "2025-04-04T00:00:00Z",
-            "position_observation": "position_xy is the aircraft position at event time; energy_interval positions are at end_s"}
-
-
-class _ObservedLedger(EventLedger):
-    """Extra output-only telemetry, added without changing execution events."""
-    simulation: Simulation | None = None
-
-    def emit(self, time_s: float, kind: str, **fields: Any) -> None:
-        aircraft_id = fields.get("aircraft_id")
-        if self.simulation is not None and aircraft_id in self.simulation.aircraft:
-            aircraft = self.simulation.aircraft[aircraft_id]
-            fields.update(position_xy=list(aircraft.position), node=aircraft.node,
-                          destination=aircraft.destination, phase_state=aircraft.phase)
-        super().emit(time_s, kind, **fields)
-
-
-def _serialize_scenario(scenario: Scenario) -> dict:
-    value = asdict(scenario)
-    value["allowed_legs"] = sorted([list(leg) for leg in scenario.allowed_legs])
-    for profile in value["profiles"].values():
-        profile["capabilities"] = sorted(profile["capabilities"])
-    return value
-
-
-def _restore_scenario(value: dict) -> Scenario:
-    value = dict(value)
-    value["positions"] = {k: tuple(v) for k, v in value["positions"].items()}
-    value["allowed_legs"] = frozenset(tuple(leg) for leg in value["allowed_legs"])
-    value["profiles"] = {k: AircraftProfile(**{**p, "capabilities": frozenset(p["capabilities"])})
-                          for k, p in value["profiles"].items()}
-    value["templates"] = {k: tuple(UnitSpec(**unit) for unit in units) for k, units in value["templates"].items()}
-    value["fleet"] = tuple(FleetMember(**member) for member in value["fleet"])
-    value["station"] = Station(**value["station"])
-    value["weather"] = tuple(WeatherInterval(**interval) for interval in value["weather"])
-    value["batch_tasks"] = tuple(BatchTask(**task) for task in value["batch_tasks"])
-    value["periodic_streams"] = tuple(PeriodicStream(**stream) for stream in value["periodic_streams"])
-    return Scenario(**value)
-
-
-def run_simulation(config: Mapping[str, Any] | str | Path | None = None,
-                   output: str | Path | None = None) -> dict[str, Any]:
-    """Execute once, independently audit, and optionally save a new run folder."""
-    config = load_config(config)
-    scenario = build_scenario(config)
-    run_config = RunConfig(execution_mode=config["execution_mode"], policy=config["policy"],
-                           planning_mode="full", periodic_release_fraction=0.5,
-                           max_targets_per_sortie=config["targets_per_sortie"])
-    source = _json("development_spells.json")
-    reliability = None
-    if config["policy"] == "B2":
-        reliability = WeatherReliability({float(k): tuple(v) for k, v in source["spells_s"].items()},
-                                          source["source_sha256"])
-    destination = io.StringIO()
-    ledger = _ObservedLedger(destination)
-    simulation = Simulation(scenario, run_config, DispatchPolicy(run_config, reliability), ledger)
-    ledger.simulation = simulation
-    simulation.run()
-    events = list(read_events(io.StringIO(destination.getvalue())))
-    report = audit(scenario, events, run_config.execution_mode,
-                   periodic_release_fraction=run_config.periodic_release_fraction,
-                   max_targets_per_sortie=run_config.max_targets_per_sortie)
-    manifest = {"schema": SCHEMA, "scenario_id": scenario.scenario_id,
-                "config": config, "execution_config": asdict(run_config),
-                "inputs_sha256": scenario.provenance["inputs_sha256"],
-                "engine_sha256": hashlib.sha256(Path(__import__("island_sim.engine", fromlist=["__file__"]).__file__).read_bytes()).hexdigest(),
-                "development_weather_sha256": source["source_sha256"],
-                "telemetry": "output-only position fields; frozen engine and policy source unchanged"}
-    metadata = scenario_metadata(scenario)
-    result = {"scenario": scenario, "config": config, "events": events,
-              "audit": report, "manifest": manifest, "metadata": metadata}
-    if output is not None:
-        folder = Path(output)
-        folder.mkdir(parents=True, exist_ok=False)
-        files = {"manifest.json": manifest, "audit.json": report,
-                 "scenario.json": _serialize_scenario(scenario), "config.json": config,
-                 "metadata.json": metadata, "status.json": {"status": report["status"]}}
-        for name, payload in files.items():
-            (folder / name).write_text(json.dumps(payload, indent=2, allow_nan=False) + "\n", encoding="utf-8")
-        (folder / "events.jsonl").write_text(destination.getvalue(), encoding="utf-8")
+def _synthetic_weather(zones: list[dict], stop_s: float, arrangement: str) -> dict:
+    """Deterministic illustrative grid-axis winds, independent of evaluation data."""
+    result = {}
+    # Twenty-minute intervals expose spatially different task opening/closure.
+    step_s = 1200.0
+    for i, zone in enumerate(zones):
+        rows = []
+        left = 0.0
+        while left < stop_s:
+            right = min(left + step_s, stop_s)
+            midpoint = (left + right) / 2
+            if arrangement == "variable":
+                speed = 6.0 + 3.0 * math.sin(2 * math.pi * midpoint / 10800 + i * .65)
+            else:
+                open_s = 360.0 if arrangement == "continuous" else 120.0
+                # Edges must follow opening periods exactly for controlled demonstrations.
+                right = min(left + open_s, stop_s)
+                speed = 5.0 if int(left / open_s + i) % 2 == 0 else 11.0
+            angle = 2 * math.pi * midpoint / 21600 + i * .22
+            rows.append(dict(start_s=left, end_s=right,
+                             east_mps=speed * math.cos(angle), north_mps=speed * math.sin(angle),
+                             vector_frame="projected_grid_xy"))
+            left = right
+        result[zone["id"]] = rows
     return result
 
 
+def _historical_weather(cfg: dict, scene: dict) -> dict:
+    product = "era5" if cfg["network_id"] == "legacy_24" else "ifs"
+    block = _read(DATA / f"weather/{product}_20250404.json")
+    epoch = datetime(2025, 4, 4, tzinfo=timezone.utc)
+    start = epoch + timedelta(hours=cfg["historical_start_hour"])
+    stop_s = scene["clock"]["recovery_end_s"]
+    grouped = {}
+    for row in block["rows"]:
+        t = datetime.fromisoformat(row["time_utc"].replace("Z", "+00:00"))
+        left, right = (t-start).total_seconds(), (t-start).total_seconds()+3600
+        if right <= 0 or left >= stop_s:
+            continue
+        grouped.setdefault(row["zone_id"], []).append(dict(start_s=max(0., left), end_s=min(stop_s, right),
+                                                          east_mps=row["east_mps"], north_mps=row["north_mps"]))
+    return rotate_weather_to_grid(grouped, scene["weather_zones"],
+                                  _read(DATA / "weather/wind_coordinate_frames.json"), cfg["network_id"])
+
+
+def _engine_config(cfg: dict) -> dict:
+    engine = dict(policy=cfg["policy"], recovery=cfg["recovery_policy"],
+                  max_targets_per_sortie=cfg["targets_per_sortie"],
+                  execution_mode=cfg["execution_mode"], record_events=True,
+                  air_capacity=8 if cfg["network_id"] == "legacy_24" else 24)
+    if cfg["policy"] == "B2":
+        product = "era5" if cfg["network_id"] == "legacy_24" else "ifs"
+        engine["reliability"] = _read(DATA / f"weather/{product}_development_spells.json")
+    return engine
+
+
+def build_scenario(config: dict | str | Path | None = None) -> dict:
+    cfg = load_config(config)
+    scene = _read(DATA / f"networks/{cfg['network_id']}_seed{cfg['task_seed']}.json")
+    per_base = cfg["fleet_size"] // len(scene["bases"])
+    scene["fleet"] = [member for base in scene["bases"]
+                      for member in [m for m in scene["fleet"] if m["home_base_id"] == base["id"]][:per_base]]
+    if len(scene["fleet"]) != cfg["fleet_size"]:
+        raise ValueError("Insufficient prepared aircraft capacity")
+    for base in scene["bases"]:
+        base.update(charge_ports=cfg["charge_ports"], port_input_w=cfg["port_input_w"])
+    if cfg["initial_age_mode"] == "due":
+        for task in scene["tasks"]:
+            task["initial_age_s"] = task["interval_s"]
+    warmup = cfg["warmup_hours"] * 3600
+    end = warmup + cfg["duration_hours"] * 3600
+    scene["clock"] = dict(evaluation_start_s=warmup, evaluation_end_s=end,
+                          recovery_end_s=end + cfg["recovery_hours"] * 3600)
+    scene["business"] = "periodic"
+    scene["weather"] = (_historical_weather(cfg, scene) if cfg["weather"] == "historical"
+                        else _synthetic_weather(scene["weather_zones"], scene["clock"]["recovery_end_s"], cfg["weather_arrangement"]))
+    scene["scenario_id"] = f"public-{cfg['network_id']}-s{cfg['task_seed']}"
+    scene.setdefault("metadata", {}).update(public_demo=True,
+        weather_label=("Illustrative synthetic wind; not a paper experiment" if cfg["weather"] == "synthetic"
+                       else "Historical 2025 wind, user-selected configuration"),
+        wind_execution_reference_frame="EPSG:32650 projected grid easting/northing")
+    return scene
+
+
+def _metadata(scene: dict, cfg: dict, reference: str | None = None) -> dict:
+    display = _read(DATA / "display_coordinates.json")[cfg["network_id"]]
+    def located(position_id: str, value: dict) -> dict:
+        return {**value, **scene["positions"][position_id], **display[position_id]}
+    sites = [located(task["position_id"], task) for task in scene["tasks"]]
+    bases = [located(base["position_id"], base) for base in scene["bases"]]
+    zones = []
+    frames = _read(DATA / "weather/wind_coordinate_frames.json")
+    group = "legacy_24" if cfg["network_id"] == "legacy_24" else "pingtan"
+    for zone in scene["weather_zones"]:
+        z = dict(zone)
+        if "longitude" not in z:
+            f = frames["networks"][group]["zones"][z["id"]]
+            z.update(longitude=f["scene_anchor_longitude"], latitude=f["scene_anchor_latitude"])
+        zones.append(z)
+    return dict(schema_version=2, crs="EPSG:32650", sites=sites, bases=bases,
+                weather_zones=zones, profiles=copy.deepcopy(scene["profiles"]),
+                weather_source=cfg["weather"],
+                weather_label=("Illustrative synthetic wind — demonstration only" if cfg["weather"] == "synthetic"
+                               else "Historical ERA5-derived wind" if group == "legacy_24" else "Historical ECMWF IFS regional wind"),
+                is_formal_reference=reference is not None, reference_case=reference,
+                run_purpose="Selected archived reference reproduction" if reference else "User-configured demonstration",
+                historical_start_utc=(datetime(2025,4,4,tzinfo=timezone.utc)+timedelta(hours=cfg["historical_start_hour"])).isoformat()
+                    if cfg["weather"] == "historical" else None,
+                map_attribution="© OpenStreetMap contributors", coordinates_for_display_only=True)
+
+
+def _execute(scene: dict, engine_config: dict, cfg: dict, output: str | Path | None,
+             reference: str | None = None) -> dict:
+    folder = Path(output) if output is not None else None
+    if folder is not None and (folder / "manifest.json").exists():
+        raise FileExistsError(f"Refusing to overwrite an existing simulation: {folder}")
+    start = time.perf_counter()
+    physical = simulate(scene, engine_config)
+    physical_audit = audit_result(scene, physical)
+    delivery = evaluate_delivery(scene, physical, mode="base")
+    delivery_audit = audit_delivery(scene, physical, delivery)
+    status = "pass" if physical_audit["status"] == delivery_audit["status"] == "pass" else "fail"
+    audit = dict(status=status, physical=physical_audit, delivery=delivery_audit)
+    metadata = _metadata(scene, cfg, reference)
+    manifest = dict(schema=SCHEMA, package_version="0.2.0", elapsed_s=time.perf_counter()-start,
+                    reference_case=reference, scope="One simulation; selected reference cases do not reproduce the entire paper study.",
+                    physical_core="Frozen V5 executor, unchanged", recorded_safety_flags=physical["metrics"]["safety_violations"],
+                    audit_interpretation="Independent service, energy, resource and delivery accounting consistency; not a safety certification.")
+    result = dict(scenario=scene, physical=physical, delivery=delivery, config=cfg,
+                  metadata=metadata, audit=audit, manifest=manifest, events=physical["events"])
+    if folder is not None:
+        folder.mkdir(parents=True, exist_ok=True)
+        for name, value in (("scenario",scene),("physical",physical),("delivery",delivery),
+                            ("config",cfg),("metadata",metadata),("audit",audit),("manifest",manifest)):
+            _write(folder / f"{name}.json", value)
+        _write(folder / "execution_config.json", engine_config)
+        with (folder / "events.jsonl").open("w", encoding="utf-8") as f:
+            for event in physical["events"]:
+                f.write(json.dumps(event, ensure_ascii=False, allow_nan=False, separators=(",", ":"))+"\n")
+        manifest["sha256"] = {p.name:_hash(p) for p in folder.iterdir() if p.name in
+                               ("scenario.json","physical.json","delivery.json","config.json","metadata.json","execution_config.json","events.jsonl")}
+        _write(folder / "manifest.json", manifest)
+    return result
+
+
+def run_simulation(config: dict | str | Path | None = None, output: str | Path | None = None) -> dict:
+    cfg = load_config(config)
+    return _execute(build_scenario(cfg), _engine_config(cfg), cfg, output)
+
+
 def audit_saved_run(folder: str | Path) -> dict:
-    """Recalculate metrics from the saved scenario and ledger, without new runs."""
-    folder = Path(folder)
-    manifest = json.loads((folder / "manifest.json").read_text(encoding="utf-8"))
-    if manifest.get("schema") != SCHEMA:
-        raise ValueError("Unknown run-manifest schema.")
-    scenario = _restore_scenario(json.loads((folder / "scenario.json").read_text(encoding="utf-8")))
-    with (folder / "events.jsonl").open(encoding="utf-8") as stream:
-        return audit(scenario, read_events(stream), **{
-            key: manifest["execution_config"][key]
-            for key in ("execution_mode", "periodic_release_fraction", "max_targets_per_sortie")})
+    """Recompute independent accounts and check saved source-file integrity."""
+    directory = Path(folder)
+    scene = _read(directory / "scenario.json")
+    physical = _read(directory / "physical.json")
+    delivery = _read(directory / "delivery.json")
+    physical_audit = audit_result(scene, physical)
+    delivery_audit = audit_delivery(scene, physical, delivery)
+    manifest = _read(directory / "manifest.json")
+    integrity = [{"file":name, "match":(directory/name).is_file() and _hash(directory/name)==digest}
+                 for name,digest in manifest.get("sha256",{}).items()]
+    status = "pass" if physical_audit["status"] == delivery_audit["status"] == "pass" and all(r["match"] for r in integrity) else "fail"
+    return dict(status=status, physical=physical_audit, delivery=delivery_audit, integrity=integrity)

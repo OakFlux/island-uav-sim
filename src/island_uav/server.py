@@ -9,25 +9,14 @@ from threading import Lock
 from urllib.parse import unquote, urlsplit
 
 from .replay import make_replay
-from .runner import default_config, run_simulation
+from .runner import default_config, run_simulation, validate_config
 
 WEB = Path(__file__).resolve().parent / 'web'
-ALLOWED = {
-    'fleet_size': {2,4,8}, 'targets_per_sortie': {1,2}, 'charge_ports': {1,2},
-    'port_input_w': {120,240,480}, 'policy': {'B0','B2'},
-    'weather': {'synthetic','historical'}, 'duration_hours': {2,4,6,8,12,24},
-}
-
-
 def validate_options(value: object) -> dict:
+    """Use the same public configuration contract as the command line."""
     if not isinstance(value, dict):
         raise ValueError('Configuration must be a JSON object.')
-    if set(value) - set(ALLOWED):
-        raise ValueError('Unknown configuration option.')
-    for key, item in value.items():
-        if not isinstance(item, (str,int,float)) or isinstance(item,bool) or item not in ALLOWED[key]:
-            raise ValueError(f'Invalid {key}. Allowed: {sorted(ALLOWED[key])}')
-    return {**default_config(), **value}
+    return validate_config(value)
 
 
 def serve(host: str = '127.0.0.1', port: int = 8000, open_browser: bool = False) -> None:
@@ -48,6 +37,13 @@ def serve(host: str = '127.0.0.1', port: int = 8000, open_browser: bool = False)
 
         def do_GET(self) -> None:
             path = unquote(urlsplit(self.path).path)
+            if path == '/api/options':
+                self.send_json(200, {'default': default_config(), 'networks': {
+                    'legacy_24': {'sites':24,'bases':1,'fleets':[2,4,8]},
+                    'pingtan_48': {'sites':48,'bases':3,'fleets':[6,12,24]},
+                    'pingtan_96': {'sites':96,'bases':3,'fleets':[6,12,24]},
+                    'pingtan_192': {'sites':192,'bases':3,'fleets':[6,12,24]}}})
+                return
             if path == '/api/default':
                 try:
                     with lock:

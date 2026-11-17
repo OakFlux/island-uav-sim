@@ -1,9 +1,9 @@
 cff-version: 1.2.0
-message: "Research software accompanying a working paper under submission."
+message: "Research software accompanying a working paper prepared for journal submission."
 title: "Island UAV inspection simulation"
 type: software
-version: 0.1.0
-date-released: 2026-11-15
+version: 0.2.0
+date-released: 2026-11-17
 authors:
   - family-names: Lu
     given-names: Jiaming
@@ -14,3 +14,4 @@ authors:
   - family-names: Liu
     given-names: Guobin
 license: MIT
+repository-code: "https://github.com/OakFlux/island-uav-sim"

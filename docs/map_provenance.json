@@ -1,21 +1,34 @@
 {
-  "source": "OpenStreetMap data / Geofabrik Fujian extract dated 2026-01-01",
-  "derivative": "Preserve complete island polygon; clip roads and land use to bounds and simplify for display only.",
-  "bounds": [
-    119.674,
-    25.443,
-    119.792,
-    25.54
+  "sources": [
+    {
+      "source": "raw/geography/inherited/haitan_boundary.geojson",
+      "sha256": "7a1d5f30c8be2b726c1e2e3a9c59042dccaf0c243cc559c93c36ec30997722b9",
+      "layer": "land",
+      "features": 1
+    },
+    {
+      "source": "raw/geography/inherited/gis_osm_landuse_a_free_1.geojson",
+      "sha256": "86ceb9937d84675b1473c6bc07a8e625e5fdad64cde60bab8c61dbb4d576ea16",
+      "layer": "landuse",
+      "features": 494
+    },
+    {
+      "source": "raw/geography/inherited/gis_osm_roads_free_1.geojson",
+      "sha256": "fe6febf0aafa0fd0e5ce46dff343b17739f87372f5e2088546b47d3a3bf0c87a",
+      "layer": "roads",
+      "features": 4353
+    },
+    {
+      "source": "processed/geography/research_weather_zones.geojson",
+      "sha256": "7b809bb52efb91bc21a83908e63745f16b7b5a8769a396ef23ec99fb62a7b987",
+      "layer": "windzone",
+      "features": 6
+    }
   ],
-  "crs": "EPSG:4326",
-  "original_sha256": {
-    "haitan_boundary.geojson": "7a1d5f30c8be2b726c1e2e3a9c59042dccaf0c243cc559c93c36ec30997722b9",
-    "gis_osm_landuse_a_free_1.geojson": "86ceb9937d84675b1473c6bc07a8e625e5fdad64cde60bab8c61dbb4d576ea16",
-    "gis_osm_roads_free_1.geojson": "fe6febf0aafa0fd0e5ce46dff343b17739f87372f5e2088546b47d3a3bf0c87a"
-  },
-  "feature_count": 1447,
-  "output_sha256": "ae60762c0eb2f49d9161ea5578b28acf69db572d93debfa0964ad55d88c83296",
-  "license": "https://opendatacommons.org/licenses/odbl/1-0/",
-  "attribution": "© OpenStreetMap contributors",
-  "display_derivative_changes_simulation_geometry": false
+  "output_sha256": "047ad317266ef31a78ef05923d23a454a86d527a18ed4bf1fbd9459b2e89840e",
+  "features": 4854,
+  "licence": "ODbL-1.0",
+  "coordinate_rounding_decimals": 6,
+  "extent": "Full Pingtan study island; no V4 UI crop",
+  "source_url": "https://download.geofabrik.de/asia/china/fujian.html"
 }

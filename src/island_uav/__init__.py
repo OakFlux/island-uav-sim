@@ -1,3 +1,3 @@
-"""Weather-constrained UAV inspection simulation and browser interface."""
+"""Wind-constrained UAV inspection: multi-base execution and browser replay."""
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"

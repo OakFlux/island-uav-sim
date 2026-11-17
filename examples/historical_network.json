@@ -1,0 +1,11 @@
+{
+  "network_id": "pingtan_96",
+  "fleet_size": 12,
+  "weather": "historical",
+  "duration_hours": 72,
+  "warmup_hours": 24,
+  "recovery_hours": 1,
+  "policy": "B2",
+  "recovery_policy": "NEAR",
+  "initial_age_mode": "paper"
+}

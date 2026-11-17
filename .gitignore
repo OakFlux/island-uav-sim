@@ -8,3 +8,6 @@ dist/
 outputs/
 .pytest_cache/
 .DS_Store
+runs/
+output/
+.playwright-cli/

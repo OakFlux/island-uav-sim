@@ -1,53 +1,103 @@
-# Usage
+# Running the model
 
-Install Python 3.10 or later, then run `python -m pip install -e .` from the repository directory. There are no runtime dependencies, map keys, JavaScript build steps or external services. A virtual environment is recommended. Windows users can use `py` in place of `python`.
+Python 3.10 or newer is required. The simulation and local web server use the Python standard library. Install from the repository root:
 
-## Browser
+```sh
+python -m pip install -e .
+island-uav serve --open
+```
 
-Run `island-uav serve` and open http://127.0.0.1:8000. `--open` opens the browser automatically; `--port 8080` changes the port. Ctrl+C stops the server. The server binds to the local computer by default.
+The local Python server executes the physical simulation; the browser replays its recorded aircraft positions in 2D. The default is a six-hour, 96-location, 12-aircraft **demonstration with synthetic wind**, three bases and near-base recovery. Its task ages start at their target intervals so that aircraft are active immediately. It is not a formal paper result.
 
-Choose 2, 4 or 8 aircraft, one or two sites per sortie, charging ports and power, dispatch policy, weather and duration. **Run simulation** executes the model again; Play, the speed selector and the timeline explore the resulting event trajectory. The interface interpolates motion between observed simulation events. It does not change flight, sensing or decision rules. Select a site to inspect its task type and revisit requirement; drag or scroll to pan or zoom. The JSON download contains the displayed trajectory and independent audit summary.
+## A configuration file
 
-The default uses controlled synthetic wind to make weather interruptions visible. Historical weather is a separate selection using an actual regional wind block. A run includes its selected inspection horizon followed by a one-hour recovery period; no new inspections are dispatched after the inspection horizon closes.
+```sh
+island-uav run --config examples/demo.json --output runs/demo --replay
+```
 
-**Displayed indicators:** completed inspections and energy are cumulative from simulation start. Current mean information age (AoI) and overdue ratio summarize the requirements at the selected instant. These time-varying displays differ from the time-averaged evaluation-period measures in the independent audit. A complete inspection, not a visit or individual view, resets information age.
+Omitting `--config` selects the same default demo. Output folders containing an existing simulation are not overwritten. `examples/compact.json` selects the single-base network. `examples/historical_network.json` uses the supplied historical block and paper initial ages. The latter has the same physical inputs as the selected network reference, apart from identifying metadata; use `reproduce` for the unchanged archived input.
 
-## JSON configurations and run outputs
+| Key | Choices or meaning |
+| --- | --- |
+| `network_id` | `legacy_24`: 24 locations and one base; `pingtan_48`, `pingtan_96`, `pingtan_192`: three bases |
+| `fleet_size` | 2, 4 or 8 for `legacy_24`; 6, 12 or 24 for the three-base networks |
+| `targets_per_sortie` | 1 or 2 distinct inspection locations per sortie |
+| `charge_ports` | 1 or 2 ports **per base** |
+| `port_input_w` | Input power of each port, in W; 120 or 240 reproduce the study designs |
+| `policy` | `B0`: urgency-based reference; `B2`: completion-aware overdue-area reference |
+| `recovery_policy` | `HOME`, `NEAR` or `QUEUE` |
+| `weather` | `synthetic` or `historical` |
+| `duration_hours` | Evaluation length, up to 72 h |
+| `warmup_hours` | Prior initialization period, 0–24 h; demo default 0 |
+| `recovery_hours` | Extra time to recover aircraft already flying, default 1 h; no new sorties |
+| `task_seed` | Prepared demand allocation 101, 202 or 303 |
+| `initial_age_mode` | `due` for active demonstrations; `paper` preserves the prepared initial ages |
+| `historical_block` | Only `2025-04-04` is bundled |
+| `historical_start_hour` | Offset into the bundled 97-hour historical block, default 0 |
+| `weather_arrangement` | `variable` normally; synthetic-only `continuous`/`fragmented` illustrate equal-share openings of different lengths |
+| `execution_mode` | `full` normally; `accumulating` and `instant_charge` are deliberate mechanism simplifications |
 
-Copy `examples/pingtan.json` and change its fields. Common options are:
+The fleet is divided equally among the bases; each base retains the prepared alternating light/general aircraft sequence. C0 is one 240 W port per base; C1 is two 120 W ports; C2 is two 240 W ports. Charging efficiency and aircraft intake limits remain active. Public validation rejects unsupported keys and invalid combinations. Historical warm-up, evaluation and recovery together must fit within the available 97 hours.
 
-| Field | Meaning |
-|---|---|
-| `fleet_size` | 2, 4 or 8 aircraft; equal shares of light RGB and general RGB/zoom aircraft |
-| `targets_per_sortie` | Maximum distinct sites per sortie: 1 or 2 |
-| `charge_ports`, `port_input_w` | Charging ports and fixed input power **per port**, in watts |
-| `policy` | `B0` priority-based dispatch; `B2` limited lookahead |
-| `weather` | `synthetic` or the bundled `historical` block |
-| `duration_hours`, `warmup_hours`, `recovery_hours` | Evaluation duration, warm-up and recovery |
-| `weather_arrangement` | `variable`, `continuous` or `fragmented` synthetic wind |
-| `task_seed` | One of three bundled demand tables: 101, 202 or 303 |
-| `initial_age_mode` | `due` for the short demonstration; `paper` for original initial ages |
+B2 ranks a bounded set of one-/two-target candidate plans by the probability-weighted reduction in priority-weighted overdue-age area over a two-hour look-ahead horizon. It breaks ties by estimated post-recovery service-readiness time, then energy and task identifiers; it executes only the first target before reconsidering the observed state. Historical opening-spell samples come only from 2023–2024; dispatch observes the current regional wind and observed opening age, not future evaluation weather. HOME returns to the assigned home base. NEAR selects a feasible base by estimated flight time. QUEUE adds current base-resource backlog and own replenishment time. These are interpretable reference rules; they are not a global scheduling optimizer.
 
-`island-uav run --config examples/historical.json --output outputs/historical --replay` saves:
+## Selected historical reference cases
 
-- `config.json` and `scenario.json`: resolved options and complete model inputs.
-- `manifest.json`: input, code and development-weather provenance.
-- `events.jsonl`: complete event ledger, including output-only position observations.
-- `audit.json` and `status.json`: independently reconstructed results and audit status.
-- `replay.json` when `--replay` is supplied: browser trajectory.
+```sh
+island-uav reproduce --case all --output runs/references
+```
 
-Choose a new output directory for each run. Existing results are never overwritten. Example demand and facility assignments are semi-synthetic; mapped locations do not establish that an asset owner commissioned a particular inspection.
+Or choose `--case compact` / `--case network`. The command loads the **unchanged archived assembled input**, runs the frozen executor, reconstructs the collection/energy/resource accounts and platform-delivery accounts independently, and compares every recorded metric against the selected archive. It takes around 20 seconds on the development machine; hardware affects time.
 
-## Selected reproduction
+| Case | Archived run | Configuration |
+| --- | --- | --- |
+| `compact` | `E1B-B04-W20250404-S101` | 24 locations, 4 UAVs, one base, C0, B2, HOME, two locations per sortie |
+| `network` | `E2-M04-W20250404-S101` | 96 locations, 12 UAVs, three bases, C0, B2, NEAR, two locations per sortie |
 
-`island-uav reproduce --output outputs/paper-case` repeats one archived full-horizon configuration: 24-hour warm-up, 72-hour evaluation and one-hour recovery under historical regional wind. It compares the resulting audit against the original case identified in `src/island_uav/data/reference.json`, and writes `reference_comparison.json`. All compared values must match. This small repository does not contain every experiment or support recomputing the full paper's statistical figures.
+Both use 4 April 2025 onward, 24 h of warm-up, 72 h of evaluation, and a 1 h recovery tail. These two configurations demonstrate reproduction of selected study inputs and outputs. The complete 1,900-run experimental archive is not distributed here.
 
-`python examples/compare_configs.py --help` provides a small new configuration comparison. Its outputs illustrate how to design further experiments; they are not replacement estimates for the paper's complete study.
+The network reference preserves its two recorded operational safety flags. An accounting audit that passes means that the recorded service, power and resource states agree with independent reconstructions; it does not certify an operation as safe or erase adverse outcomes.
 
-## Model and extensions
+## Outputs and interpretation
 
-The original discrete-event execution, dispatch and independent audit modules are retained. The public adapter loads JSON and compact CSV inputs; the browser is a read-only view of resulting event records. Inspection requirements include short observations, continuous long observations and ordered multiview observations. Completed views persist, but an interrupted active view restarts. Travel is on specified straight links with wind-dependent ground speed and phase-based energy, with shared base resources and charging queues.
+Each saved run contains:
 
-The bundled adapter targets the Pingtan case (WGS84 / UTM zone 50N). Other study areas require corresponding sites, legs, base and demand CSV inputs, appropriate weather and profiles, plus matching geographic display data and projection. The underlying engine accepts these objects; the current browser presets are Pingtan configurations.
+- `config.json`: validated public options; `execution_config.json`: executor options.
+- `scenario.json`: the complete physical input, including grid-axis wind intervals.
+- `physical.json`: physical events, completions, terminal states, metrics and energy ledger.
+- `events.jsonl`: the same event sequence as individual JSON records.
+- `delivery.json`: accepted-step carriage, unloading, complete-generation arrival, and both age measures.
+- `audit.json`: independent physical and delivery checks.
+- `metadata.json`: map coordinates and labels, kept separate from execution.
+- `manifest.json`: schema, timing, scope and hashes of saved input/output files.
+- `reference_comparison.json`: added by `reproduce`; `replay.json`: added by `--replay`.
 
-For development checks: `python -m unittest discover -s tests -v`. The command-line interface also works as `python -m island_uav`.
+Time, distance, power and energy are stored in s, m, W and Wh. Age is integrated over the evaluation interval. Operational energy includes evaluation **and the recovery tail**, without including warm-up. Some event counters and accumulated queue times describe the whole simulated run; they should not be silently interpreted as evaluation-only rates. Read the explicit cohort definitions in `delivery.json` when comparing collected and delivered counts.
+
+Collection age resets when every required inspection step has been accepted. Each accepted step remains with the aircraft that acquired it; successful landing at any modeled base unloads it instantaneously. The platform receives a complete update only when all steps from that generation have arrived, even when they were collected by different aircraft or delivered at different bases. Its timestamp remains the original complete-acquisition time. Upload duration, bandwidth, energy and dispatch feedback are not modeled. The `instant` delivery calculation is an idealized accounting reference, not an additional radio simulator.
+
+```sh
+island-uav audit runs/demo
+python -m unittest discover -s tests
+```
+
+`audit` recomputes accounts from saved physical and delivery traces and checks recorded hashes. The fast tests cover coordinate frames, directional flight, resource accounting, configuration, network selection and cross-aircraft delivery age. Historical replay is exercised by the `reproduce` command, or optionally by `ISLAND_UAV_REFERENCE_TESTS=1 python -m unittest discover -s tests`.
+
+## Using a different island
+
+The executor is independent of Pingtan. A prepared scenario supplies `positions`, regional `weather_zones`, `weather`, `bases`, `profiles`, `fleet`, `templates`, `tasks`, `clock` and optionally `allowed_legs`. For another island, prepare these dictionaries in a common metric coordinate frame and supply wind components in that same frame. Templates are ordered continuous steps; task intervals and initial ages define repeated demand. An omitted `allowed_legs` means complete straight-line connections; the supplied compact case instead retains its 546 allowed directed connections.
+
+```python
+from island_sim_v5 import simulate
+from island_uav.core.delivery import evaluate_delivery
+from island_uav.core.independent_audit import audit_result
+
+physical = simulate(scenario, {
+    "policy": "B0", "recovery": "NEAR", "max_targets_per_sortie": 2,
+    "execution_mode": "full", "record_events": True, "air_capacity": 24,
+})
+accounts = audit_result(scenario, physical)
+delivery = evaluate_delivery(scenario, physical, mode="base")
+```
+
+The bundled browser configuration is restricted to the supplied Pingtan networks; adding a new island to the browser also requires geographic display metadata. Do not reuse Pingtan's geographic wind-frame table or historical reliability samples for a different island. Base sites, permission constraints and aircraft parameters should be selected for the new research setting. These scenarios are research inputs, not flight approvals.

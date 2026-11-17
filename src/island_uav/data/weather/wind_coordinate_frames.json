@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "crs": "EPSG:32650",
+  "source_frame": "true_east_north",
+  "target_frame": "projected_grid_xy",
+  "scale_applied": false,
+  "rotation": "grid_x=u*cos(gamma)-v*sin(gamma); grid_y=u*sin(gamma)+v*cos(gamma)",
+  "reference_rule": "Convergence evaluated at each original weather response's returned representative coordinate; scene anchors only identify assignment geometry",
+  "planar_distance_scope": "UTM metric lengths approximate physical distances; local point scale is documented but not applied to physical wind speed or aircraft limits",
+  "runtime_dependency": "Python standard library; pyproj is preparation/independent-check only",
+  "preparation_versions": {
+    "pyproj": "3.7.2",
+    "PROJ": "9.5.1"
+  },
+  "source_sha256": {
+    "data/processed/weather/weather_zones.json": "72b2b977de3b55133db44cf9a60b44552700443de6b00e5ea5d4c305f39e9ec8",
+    "data/raw/weather/legacy_era5/open_meteo_era5_derived_pingtan_2023.json": "2115d67c901fe6660166989f770adc9cb77ddf48df511289dc5136a6543ab036",
+    "data/raw/weather/legacy_era5/open_meteo_era5_derived_pingtan_2024.json": "b906919caf3b4ecf8b0bf35d34c2456e2bab4c25ec336634866253aa98cb68c0",
+    "data/raw/weather/legacy_era5/open_meteo_era5_derived_pingtan_2025.json": "3d82fbea273ec411971f84a78f4f42a597bf12fd37caf28560209fd06038405a",
+    "data/raw/weather/open_meteo_ifs_six_points_2023.json": "365347f46339c353c4a12c7ccacbd15e8b6345b68c37758cd4cd75d5a58892e1",
+    "data/raw/weather/open_meteo_ifs_six_points_2024.json": "734406a71c8a1e2d2538c707c92fb920569786dc5431a3d337b2f143e83a8930",
+    "data/raw/weather/open_meteo_ifs_six_points_2025.json": "de07228aa613eaa00779805fe1e4c1918edb5e4184458e385935c12145a13b5f",
+    "data/scenarios/pingtan_192_seed101.json": "1788481bc2fc382a323bdc2ebf823e06bbbc583dbd8aedc6777a5fe6691c2bec",
+    "data/scenarios/pingtan_192_seed202.json": "97d0675c7775795eeb689c67e31636f9be173b2aeaeffcf7721a4a8e472ccf1e",
+    "data/scenarios/pingtan_192_seed303.json": "059e5314692ab6d89d09e663bbe160f696eebac2d9f5def1e8d9b4943a2ad4ee",
+    "data/scenarios/pingtan_48_seed101.json": "a55aaec910d120297e4f235a82d2b9e1241604ad2b8099d55bee3295cf9e3fdc",
+    "data/scenarios/pingtan_48_seed202.json": "5ae9957de40d45dd1fe9558f23d4255f8d0b36ff9c26e5695333d67ba71ade86",
+    "data/scenarios/pingtan_48_seed303.json": "72a7aa1370a33414220d4b2669fa0973d2bf9c077e8ba72a974acf3ccb3f634f",
+    "data/scenarios/pingtan_96_seed101.json": "ea9d93d4d3472207c7e899007423cb24e840039ecb0b889132be3dd1f3db2a9d",
+    "data/scenarios/pingtan_96_seed202.json": "85563df8ccf083517078fa881eb319eedbeb9c2af693f862dee839999f03c28b",
+    "data/scenarios/pingtan_96_seed303.json": "150dabf465210cfed352c18c58a0e4762cc9ea7dad442d4d26047f783124e50b",
+    "validation/legacy/legacy_24_seed101.json": "a56b62e3b895a83f4da2ff0b5334665851f752609d5e22dd8f857c30066b9557",
+    "validation/legacy/legacy_24_seed202.json": "bbcb2480950fcbb454049eb5d39f4833826d38497d30df3e29500b33caf7150a",
+    "validation/legacy/legacy_24_seed303.json": "914443547bc4bf1467094684c932faaa6a8290abdbc8354deb43cf8762168858"
+  },
+  "networks": {
+    "pingtan": {
+      "network_ids": [
+        "pingtan_48",
+        "pingtan_96",
+        "pingtan_192"
+      ],
+      "zones": {
+        "W1": {
+          "scene_anchor_x_m": 775625.502453145,
+          "scene_anchor_y_m": 2813510.0191326602,
+          "scene_anchor_longitude": 119.73997500000002,
+          "scene_anchor_latitude": 25.413003999999994,
+          "weather_reference_longitude": 119.739975,
+          "weather_reference_latitude": 25.413004,
+          "weather_reference_x_m": 775625.502453145,
+          "weather_reference_y_m": 2813510.0191326602,
+          "meridian_convergence_deg": 1.1765771477564158,
+          "point_scale": 1.000538226917264,
+          "parallel_scale": 1.000538226844501,
+          "weather_product": "ecmwf_ifs",
+          "basis_validation": {
+            "true_north": {
+              "projected_unit_vector": [
+                -0.02053370521673922,
+                0.9997891612485464
+              ],
+              "projection_of_one_metre_m": 1.0005382273652623,
+              "rotation_basis_max_error": 3.3059412325731063e-09
+            },
+            "true_east": {
+              "projected_unit_vector": [
+                0.9997891613047118,
+                0.020533702482039316
+              ],
+              "projection_of_one_metre_m": 1.0005382302200516,
+              "rotation_basis_max_error": 5.712413285452467e-10
+            }
+          }
+        },
+        "W2": {
+          "scene_anchor_x_m": 785439.9566894169,
+          "scene_anchor_y_m": 2813715.1813929826,
+          "scene_anchor_longitude": 119.83749,
+          "scene_anchor_latitude": 25.413003999999997,
+          "weather_reference_longitude": 119.83749,
+          "weather_reference_latitude": 25.413004,
+          "weather_reference_x_m": 785439.9566894169,
+          "weather_reference_y_m": 2813715.1813929826,
+          "meridian_convergence_deg": 1.2185070727973177,
+          "point_scale": 1.0006062444732484,
+          "parallel_scale": 1.0006062444024597,
+          "weather_product": "ecmwf_ifs",
+          "basis_validation": {
+            "true_north": {
+              "projected_unit_vector": [
+                -0.02126536082767715,
+                0.9997738666462875
+              ],
+              "projection_of_one_metre_m": 1.0006062440025483,
+              "rotation_basis_max_error": 3.52851986865077e-09
+            },
+            "true_east": {
+              "projected_unit_vector": [
+                0.9997738667173359,
+                0.021265357487395397
+              ],
+              "projection_of_one_metre_m": 1.000606247890457,
+              "rotation_basis_max_error": 1.8823811606671903e-10
+            }
+          }
+        },
+        "W3": {
+          "scene_anchor_x_m": 771973.7992383563,
+          "scene_anchor_y_m": 2829022.201163255,
+          "scene_anchor_longitude": 119.70684000000001,
+          "scene_anchor_latitude": 25.553602,
+          "weather_reference_longitude": 119.70684,
+          "weather_reference_latitude": 25.553602,
+          "weather_reference_x_m": 771973.7992383563,
+          "weather_reference_y_m": 2829022.201163255,
+          "meridian_convergence_deg": 1.1683289854974144,
+          "point_scale": 1.000513503744967,
+          "parallel_scale": 1.0005135036704613,
+          "weather_product": "ecmwf_ifs",
+          "basis_validation": {
+            "true_north": {
+              "projected_unit_vector": [
+                -0.02038977789653023,
+                0.9997921068688881
+              ],
+              "projection_of_one_metre_m": 1.000513503491757,
+              "rotation_basis_max_error": 3.434832987481151e-09
+            },
+            "true_east": {
+              "projected_unit_vector": [
+                0.9997921069387394,
+                0.020389774471438107
+              ],
+              "projection_of_one_metre_m": 1.0005135059835248,
+              "rotation_basis_max_error": 9.740864365115343e-12
+            }
+          }
+        },
+        "W4": {
+          "scene_anchor_x_m": 788529.1424981011,
+          "scene_anchor_y_m": 2821575.638593528,
+          "scene_anchor_longitude": 119.86984999999999,
+          "scene_anchor_latitude": 25.483303,
+          "weather_reference_longitude": 119.86985,
+          "weather_reference_latitude": 25.483303,
+          "weather_reference_x_m": 788529.1424981011,
+          "weather_reference_y_m": 2821575.638593528,
+          "meridian_convergence_deg": 1.2356033589093118,
+          "point_scale": 1.000628133142244,
+          "parallel_scale": 1.0006281330730573,
+          "weather_product": "ecmwf_ifs",
+          "basis_validation": {
+            "true_north": {
+              "projected_unit_vector": [
+                -0.02156367879161418,
+                0.9997674768449772
+              ],
+              "projection_of_one_metre_m": 1.0006281339215952,
+              "rotation_basis_max_error": 3.4361551451422834e-09
+            },
+            "true_east": {
+              "projected_unit_vector": [
+                0.9997674769167751,
+                0.02156367546280881
+              ],
+              "projection_of_one_metre_m": 1.000628137226565,
+              "rotation_basis_max_error": 1.0734977490267639e-10
+            }
+          }
+        },
+        "W5": {
+          "scene_anchor_x_m": 775058.7604242803,
+          "scene_anchor_y_m": 2836879.0307767447,
+          "scene_anchor_longitude": 119.73913,
+          "scene_anchor_latitude": 25.623899999999995,
+          "weather_reference_longitude": 119.73913,
+          "weather_reference_latitude": 25.6239,
+          "weather_reference_x_m": 775058.7604242803,
+          "weather_reference_y_m": 2836879.0307767447,
+          "meridian_convergence_deg": 1.1853156211378,
+          "point_scale": 1.0005343359792747,
+          "parallel_scale": 1.0005343359134404,
+          "weather_product": "ecmwf_ifs",
+          "basis_validation": {
+            "true_north": {
+              "projected_unit_vector": [
+                -0.02068618803411235,
+                0.9997860179181429
+              ],
+              "projection_of_one_metre_m": 1.0005343363441548,
+              "rotation_basis_max_error": 3.3867079904381647e-09
+            },
+            "true_east": {
+              "projected_unit_vector": [
+                0.9997860179920275,
+                0.020686184463194354
+              ],
+              "projection_of_one_metre_m": 1.000534340229183,
+              "rotation_basis_max_error": 1.8421000488877404e-10
+            }
+          }
+        },
+        "W6": {
+          "scene_anchor_x_m": 784886.651150431,
+          "scene_anchor_y_m": 2837086.012634649,
+          "scene_anchor_longitude": 119.83695,
+          "scene_anchor_latitude": 25.623899999999995,
+          "weather_reference_longitude": 119.83695,
+          "weather_reference_latitude": 25.6239,
+          "weather_reference_x_m": 784886.651150431,
+          "weather_reference_y_m": 2837086.012634649,
+          "meridian_convergence_deg": 1.2277019257782933,
+          "point_scale": 1.0006023079867687,
+          "parallel_scale": 1.0006023079139779,
+          "weather_product": "ecmwf_ifs",
+          "basis_validation": {
+            "true_north": {
+              "projected_unit_vector": [
+                -0.021425804746132884,
+                0.9997704410968452
+              ],
+              "projection_of_one_metre_m": 1.000602308620355,
+              "rotation_basis_max_error": 3.5527155106684916e-09
+            },
+            "true_east": {
+              "projected_unit_vector": [
+                0.999770441163352,
+                0.021425801642794173
+              ],
+              "projection_of_one_metre_m": 1.0006023122799386,
+              "rotation_basis_max_error": 4.493767996605058e-10
+            }
+          }
+        }
+      }
+    },
+    "legacy_24": {
+      "network_ids": [
+        "legacy_24"
+      ],
+      "zones": {
+        "W0": {
+          "scene_anchor_x_m": 774949.638,
+          "scene_anchor_y_m": 2822032.094,
+          "scene_anchor_longitude": 119.73499999864816,
+          "scene_anchor_latitude": 25.48999999879755,
+          "weather_reference_longitude": 119.75,
+          "weather_reference_latitude": 25.5,
+          "weather_reference_x_m": 776435.4090283148,
+          "weather_reference_y_m": 2823171.3645100384,
+          "meridian_convergence_deg": 1.1846588855969074,
+          "point_scale": 1.0005437347631618,
+          "parallel_scale": 1.0005437346919481,
+          "weather_product": "era5",
+          "basis_validation": {
+            "true_north": {
+              "projected_unit_vector": [
+                -0.02067472828300466,
+                0.9997862549617412
+              ],
+              "projection_of_one_metre_m": 1.0005437347834771,
+              "rotation_basis_max_error": 3.38175830394416e-09
+            },
+            "true_east": {
+              "projected_unit_vector": [
+                0.9997862550205562,
+                0.020674725438838186
+              ],
+              "projection_of_one_metre_m": 1.0005437372863022,
+              "rotation_basis_max_error": 5.375918286920633e-10
+            }
+          }
+        }
+      }
+    }
+  }
+}

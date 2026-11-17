@@ -21,122 +21,131 @@ def utm_to_lonlat(x: float, y: float, zone: int = 50) -> tuple[float, float]:
     return degrees(lon) + (zone-1)*6-180+3, degrees(lat)
 
 
-def make_replay(result: dict, sample_seconds: float = 10) -> dict:
-    """Interpolate only within recorded energy/motion intervals, never between visits."""
-    scenario, events = result['scenario'], result['events']
-    metadata = dict(result.get('metadata', {}))
-    points = scenario.positions
-    geo = {key: utm_to_lonlat(*xy) for key, xy in points.items()}
-    duration = float(scenario.recovery_end_s)
-    streams = {s.task_stream_id: s for s in scenario.periodic_streams}
-    last = {key: -s.initial_age_s for key, s in streams.items()}
-    profiles = {m.aircraft_id: scenario.profiles[m.profile_id] for m in scenario.fleet}
-    state = {m.aircraft_id: {'position_xy': points[scenario.base_id], 'phase': 'idle',
-             'energy_wh': profiles[m.aircraft_id].battery_usable_wh*m.initial_soc_fraction, 'task_id': None}
-             for m in scenario.fleet}
-    intervals = {key: [] for key in state}
-    for e in events:
-        if e['kind'] == 'energy_interval' and e.get('end_s', 0) > e.get('start_s', 0):
-            intervals[e['aircraft_id']].append(dict(e))
-    starts = {key: [e['start_s'] for e in rows] for key, rows in intervals.items()}
-    interval_by_sequence = {e['sequence']: e for rows in intervals.values() for e in rows}
-    # For an interval ending at p, use the preceding recorded position as its start.
-    previous = {key: points[scenario.base_id] for key in state}
-    for e in events:
-        key = e.get('aircraft_id')
-        if key not in state:
-            continue
-        pos = e.get('position_xy')
-        if pos is not None:
-            if e['kind'] == 'energy_interval':
-                interval_by_sequence[e['sequence']]['_replay_start_xy'] = previous[key]
-            previous[key] = pos
-    important = {float(e['time_s']) for e in events if e['kind'] in {
-        'phase_changed', 'task_completed', 'weather_changed', 'evaluation_closed'}}
-    times = sorted({0.0, duration, float(scenario.evaluation_start_s), float(scenario.evaluation_end_s),
-                    *important, *[float(i*sample_seconds) for i in range(int(duration/sample_seconds)+1)]})
-    event_index, completed, consumed = 0, 0, 0.0
-    wind = (0.0, 0.0)
-    frames = []
+def make_replay(result: dict, sample_seconds: float = 30) -> dict:
+    """Project genuine V5 phases and information histories without altering execution.
+
+    Motion and energy interpolate within one recorded phase only. Aircraft tracks
+    retain every actual phase boundary; sampled metric frames are independent.
+    """
+    scenario, physical, delivery = result['scenario'], result['physical'], result['delivery']
+    events = physical['events']
+    stop = float(physical['terminal']['time_s'])
+    positions = scenario['positions']
+    xy = {key: (row['x_m'], row['y_m']) for key, row in positions.items()}
+    def geo(point):
+        lon, lat = utm_to_lonlat(*point)
+        return [round(lon, 8), round(lat, 8)]
+    terminals = {row['id']: row for row in physical['terminal']['aircraft']}
+    tracks, aircraft = {}, []
+    for member in scenario['fleet']:
+        uid = member['id']; profile = scenario['profiles'][member['profile_id']]
+        aircraft.append({'id': uid, 'profile_id': member['profile_id'], 'capacity_wh': profile['battery_usable_wh'],
+                         'capabilities': profile['capabilities'], 'home_base_id': member['home_base_id']})
+        phases = [e for e in events if e['type'] == 'phase_started' and e.get('aircraft_id') == uid]
+        by_time = {float(e['time_s']): e for e in phases}
+        end = terminals[uid]
+        by_time[stop] = {'time_s': stop, 'position': end['position'], 'energy_wh': end['energy_wh'],
+                         'phase': end['phase'], 'base_id': end['current_base_id'], 'task_id': None,
+                         'power_w': 0, 'charge_battery_w': 0}
+        ordered = [by_time[t] for t in sorted(by_time)]
+        rows = []; used_before = 0.
+        for index, event in enumerate(ordered):
+            nxt = ordered[min(index+1, len(ordered)-1)]
+            dt = nxt['time_s']-event['time_s']
+            moving = event['phase'] in {'transit', 'return'}
+            pos = geo(event['position']); endpos = geo(nxt['position']) if moving else pos
+            energy_end = event['energy_wh'] + (event.get('charge_battery_w', 0)-event.get('power_w', 0))*dt/3600
+            rows.append({'t': event['time_s'], 'end_t': nxt['time_s'], 'lon': pos[0], 'lat': pos[1],
+                         'end_lon': endpos[0], 'end_lat': endpos[1], 'phase': event['phase'],
+                         'energy_wh': event['energy_wh'], 'end_energy_wh': max(0, energy_end),
+                         'task_id': event.get('task_id'), 'base_id': event.get('base_id'),
+                         'power_w': event.get('power_w', 0), 'consumed_wh_start': used_before})
+            used_before += event.get('power_w', 0)*dt/3600
+        tracks[uid] = rows
+    starts = {uid: [r['t'] for r in rows] for uid, rows in tracks.items()}
+    def state_at(uid, t):
+        row = tracks[uid][max(0, bisect_right(starts[uid], t)-1)]
+        f = min(1, max(0, (t-row['t'])/(row['end_t']-row['t']))) if row['end_t'] > row['t'] else 0
+        return dict(id=uid, lon=row['lon']+f*(row['end_lon']-row['lon']), lat=row['lat']+f*(row['end_lat']-row['lat']),
+                    energy_wh=row['energy_wh']+f*(row['end_energy_wh']-row['energy_wh']),
+                    phase=row['phase'], task_id=row['task_id'], base_id=row['base_id'])
+    task_ids = {task['id']: task for task in scenario['tasks']}
+    stamps_c = {tid: -task.get('initial_age_s', 0) for tid, task in task_ids.items()}
+    stamps_p = dict(stamps_c)
+    acquisitions = sorted(physical['completions'], key=lambda e: e['time_s'])
+    receipts = sorted(delivery['platform_updates'], key=lambda e: e['delivery_time_s'])
+    step = max(float(sample_seconds), stop/1800)
+    times = sorted({0., stop, float(scenario['clock']['evaluation_start_s']), float(scenario['clock']['evaluation_end_s']),
+                    *[min(stop, i*step) for i in range(int(stop/step)+1)],
+                    *[r['start_s'] for series in scenario['weather'].values() for r in series]})
+    ci = pi = 0; frames = []
+    # Exact cumulative phase power: every interval comes from the physical events.
+    consumption = []
+    for uid, rows in tracks.items():
+        phases = {float(e['time_s']): e for e in events if e['type'] == 'phase_started' and e.get('aircraft_id') == uid}
+        for row in rows:
+            power = phases.get(row['t'], {}).get('power_w', 0)
+            consumption.append((row['t'], row['end_t'], power))
+    power_events = sorted([(a, power) for a,b,power in consumption] + [(b, -power) for a,b,power in consumption])
+    power_i = 0; total_power = 0.; energy_integral = 0.; last_power_t = 0.
     for t in times:
-        if t > duration:
-            continue
-        while event_index < len(events) and events[event_index]['time_s'] <= t + 1e-8:
-            e = events[event_index]; event_index += 1
-            key, kind = e.get('aircraft_id'), e['kind']
-            if kind == 'weather_changed':
-                wind = (e['wind_east_mps'], e['wind_north_mps'])
-            if kind == 'task_completed':
-                completed += 1
-                if e.get('stream_id') in last:
-                    last[e['stream_id']] = e['time_s']
-            if key not in state:
-                continue
-            st = state[key]
-            if 'position_xy' in e:
-                st['position_xy'] = e['position_xy']
-            if kind == 'phase_changed':
-                st['phase'] = e['phase']; st['energy_wh'] = e['energy_wh']
-            if kind == 'task_assigned':
-                st['task_id'] = e['task_id']
-            if kind in {'task_completed', 'task_interrupted'}:
-                st['task_id'] = None
-            if kind == 'energy_interval':
-                st['energy_wh'] = e['energy_after_wh']; consumed += e['consumed_wh']
-        aircraft, partial_consumed = [], 0.0
-        for key, st in state.items():
-            xy, energy = st['position_xy'], st['energy_wh']
-            index = bisect_right(starts[key], t + 1e-8)-1
-            if index >= 0:
-                interval = intervals[key][index]
-                a, b = interval['start_s'], interval['end_s']
-                if a <= t < b:
-                    f = max(0.0, min(1.0, (t-a)/(b-a)))
-                    energy = interval['energy_before_wh'] + f*(interval['energy_after_wh']-interval['energy_before_wh'])
-                    partial_consumed += interval['consumed_wh']*f
-                    if interval['phase'] in {'transit', 'return'}:
-                        start, end = interval['_replay_start_xy'], interval.get('position_xy', xy)
-                        xy = [start[i]+f*(end[i]-start[i]) for i in range(2)]
-            lon, lat = utm_to_lonlat(*xy)
-            aircraft.append({'id': key, 'lon': round(lon,8), 'lat': round(lat,8),
-                'energy_wh': round(energy,4), 'phase': st['phase'], 'task_id': st['task_id']})
-        ages = [(t-last[key]) for key in streams]
-        overdue = [max(0, (t-last[key])/s.target_interval_s-1) for key, s in streams.items()]
-        frames.append({'t': round(t,6), 'aircraft': aircraft, 'completed': completed,
-            'energy_wh': round(consumed+partial_consumed,4),
-            'age_h': round(sum(ages)/len(ages)/3600,5) if ages else 0,
-            'overdue': round(sum(overdue)/len(overdue),5) if overdue else 0,
-            'wind_east_mps': wind[0], 'wind_north_mps': wind[1],
-            'charging': sum(st['phase']=='charging' for st in state.values()),
-            'queue': sum(st['phase']=='charge_wait' for st in state.values())})
-    site_metadata = {s['id']: s for s in metadata.get('sites', [])}
+        while power_i < len(power_events) and power_events[power_i][0] <= t:
+            at, delta = power_events[power_i]; energy_integral += (at-last_power_t)*total_power/3600
+            last_power_t = at; total_power += delta; power_i += 1
+        while ci < len(acquisitions) and acquisitions[ci]['time_s'] <= t+1e-8:
+            event = acquisitions[ci]; stamps_c[event['task_id']] = event['time_s']; ci += 1
+        while pi < len(receipts) and receipts[pi]['delivery_time_s'] <= t+1e-8:
+            event = receipts[pi]; tid = event['task_id']; stamps_p[tid] = max(stamps_p[tid], event['generation_time_s']); pi += 1
+        current = [state_at(uid, t) for uid in tracks]
+        winds = []
+        for region in scenario['weather_zones']:
+            series = scenario['weather'][region['id']]
+            at = min(len(series)-1, max(0, bisect_right([r['start_s'] for r in series], t)-1)); wind = series[at]
+            lon, lat = geo((region['x_m'], region['y_m']))
+            winds.append({'id': region['id'], 'lon': lon, 'lat': lat, 'east': wind['east_mps'], 'north': wind['north_mps']})
+        consumed = energy_integral + (t-last_power_t)*total_power/3600
+        frames.append({'t': t, 'aircraft': current, 'completed': ci, 'delivered': pi, 'energy_wh': consumed,
+                       'age_h': sum(t-stamps_c[tid] for tid in task_ids)/len(task_ids)/3600,
+                       'platform_age_h': sum(t-stamps_p[tid] for tid in task_ids)/len(task_ids)/3600,
+                       'overdue': sum(max(0, (t-stamps_c[tid])/task['interval_s']-1) for tid, task in task_ids.items())/len(task_ids),
+                       'charging': sum(a['phase']=='charging' for a in current), 'queue': sum(a['phase']=='charge_wait' for a in current),
+                       'winds': winds, 'wind_east_mps': winds[0]['east'], 'wind_north_mps': winds[0]['north']})
     sites = []
-    for s in scenario.periodic_streams:
-        lon, lat = geo[s.asset_id]
-        sites.append({'id': s.asset_id, 'lon': lon, 'lat': lat, 'template': s.template_id,
-            'interval_s': s.target_interval_s, 'initial_age_s': s.initial_age_s,
-            'evidence': site_metadata.get(s.asset_id,{}).get('evidence','scenario')})
-    visible = {'task_assigned','task_completed','task_interrupted','unit_interrupted','sortie_started',
-               'sortie_finished','queue_entered','queue_left','weather_changed','aircraft_failed'}
+    source_sites = {s['id']: s for s in result.get('metadata', {}).get('sites', [])}
+    for task in scenario['tasks']:
+        lon, lat = geo(xy[task['position_id']]); source = source_sites.get(task['id'], {})
+        sites.append({'id': task['position_id'], 'task_id': task['id'], 'lon': lon, 'lat': lat, 'template': task['template_id'],
+                      'interval_s': task['interval_s'], 'initial_age_s': task.get('initial_age_s', 0),
+                      'evidence': source.get('evidence', source.get('evidence_class', 'scenario'))})
+    bases = []
+    for base in scenario['bases']:
+        lon, lat = geo(xy[base['position_id']]); bases.append({'id': base['id'], 'lon': lon, 'lat': lat,
+                     'ports': base['charge_ports'], 'power_w': base['port_input_w']})
+    visible = {'inspection_completed', 'service_interrupted', 'recovery_selected', 'sortie_started', 'sortie_ended', 'aircraft_failed', 'weather_changed'}
     log = []
-    for e in events:
-        if e['kind'] not in visible:
-            continue
-        log.append({'t': e['time_s'], 'kind': e['kind'], 'aircraft_id': e.get('aircraft_id'),
-            'site_id': e.get('asset_id'), 'task_id': e.get('task_id'),
-            'message': e['kind'].replace('_',' ').capitalize() +
-                (' · '+e['aircraft_id'] if e.get('aircraft_id') else '') +
-                (' · '+e['asset_id'] if e.get('asset_id') else '')})
-    lon, lat = geo[scenario.base_id]
-    metadata.update({'title':'Pingtan Island inspection', 'duration_s': duration,
-        'evaluation_start_s': scenario.evaluation_start_s, 'evaluation_end_s': scenario.evaluation_end_s,
-        'policy': result['config'].get('policy','B2'), 'weather': result['config'].get('weather','synthetic'),
-        'map_bounds': [119.674,25.443,119.792,25.540],
-        'configuration': result['config'], 'config': result['config'], 'sample_seconds': sample_seconds,
-        'metrics_note':'Current mean AoI and overdue ratio are across requirements at the displayed time. Counts and energy are cumulative from simulation start; audited evaluation metrics are in summary.'})
-    metadata.pop('sites', None);metadata.pop('base',None)
-    return {'metadata':metadata, 'base':{'id':scenario.base_id,'lon':lon,'lat':lat}, 'sites':sites,
-        'aircraft':[{'id':m.aircraft_id,'profile_id':m.profile_id,
-            'capacity_wh':profiles[m.aircraft_id].battery_usable_wh,
-            'capabilities':sorted(profiles[m.aircraft_id].capabilities)} for m in scenario.fleet],
-        'frames':frames,'events':log,'summary':result['audit']}
+    for event in events:
+        if event['type'] not in visible: continue
+        uid, tid = event.get('aircraft_id'), event.get('task_id')
+        text = {'inspection_completed': 'Inspection complete', 'service_interrupted': 'Sensing interrupted', 'recovery_selected': 'Recovering',
+                'sortie_started': 'Departing', 'sortie_ended': 'Landed' if event.get('outcome')=='landed' else 'Sortie ended',
+                'aircraft_failed': 'Aircraft unavailable', 'weather_changed': 'Wind changed'}[event['type']]
+        log.append({'t': event['time_s'], 'kind': event['type'], 'aircraft_id': uid, 'site_id': tid,
+                    'base_id':event.get('base_id'),'origin_base_id':event.get('origin_base_id'),
+                    'cross_base':event['type']=='sortie_ended' and event.get('outcome')=='landed' and event.get('origin_base_id')!=event.get('base_id'),
+                    'message': ' · '.join(str(x) for x in [text, uid, tid, event.get('base_id')] if x)})
+    bounds_points = sites+bases
+    lo, hi = min(s['lon'] for s in bounds_points), max(s['lon'] for s in bounds_points)
+    bottom, top = min(s['lat'] for s in bounds_points), max(s['lat'] for s in bounds_points)
+    config = result['config']; metadata = dict(result.get('metadata', {}))
+    metadata.update({'title': 'Pingtan Island inspection', 'duration_s': stop, 'evaluation_start_s': scenario['clock']['evaluation_start_s'],
+                     'evaluation_end_s': scenario['clock']['evaluation_end_s'], 'map_bounds': [lo-.009,bottom-.009,hi+.009,top+.009],
+                     'config': config, 'configuration': config, 'weather': config['weather'], 'policy': config['policy'],
+                     'wind_label': 'Illustrative synthetic wind' if config['weather']=='synthetic' else 'Historical regional wind',
+                     'metrics_note': 'Displayed ages are instantaneous means; energy and completions accumulate from the beginning of this replay. Evaluation-window means are in the downloaded summary.',
+                     'sample_seconds': step})
+    for key in ('sites', 'bases', 'weather_zones'): metadata.pop(key, None)
+    return {'metadata': metadata, 'base': bases[0], 'bases': bases, 'sites': sites, 'aircraft': aircraft,
+            'tracks': tracks, 'frames': frames, 'events': log,
+            'collection_history': [{'t':e['time_s'],'task_id':e['task_id'],'stamp':e['time_s']} for e in acquisitions],
+            'platform_history': [{'t':e['delivery_time_s'],'task_id':e['task_id'],'stamp':e['generation_time_s']} for e in receipts],
+            'summary': {'physical': result.get('audit'), 'collection': physical['metrics'], 'delivery': delivery['metrics']}}

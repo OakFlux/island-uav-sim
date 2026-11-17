@@ -4,8 +4,8 @@
   const $ = id => document.getElementById(id);
   const palette = ['#087f83','#c17836','#7763a1','#3b6ca5','#b45365','#64874b','#a48b29','#478d9d'];
   const taskColors = {S:'#087f83', L:'#b96b29', M:'#7967a5'};
-  const phases = {idle:'Available',ready_charge:'Available',ready_transit:'Departing',takeoff:'Taking off',transit:'Flying',ready_service:'At site',service:'Inspecting',continue:'At site',ready_return:'Returning',return:'Returning',landing_wait:'Holding',landing:'Landing',turnaround:'Turnaround',charge_wait:'Charge queue',charging:'Charging',ground_closed:'At base',failed:'Unavailable'};
-  const flying = new Set(['takeoff','transit','return','service','ready_service','ready_return','ready_transit','continue','landing_wait','landing']);
+  const phases = {idle:'Available',ready_charge:'Available',ready_transit:'Departing',takeoff:'Taking off',transit:'Flying',ready_service:'At site',service:'Inspecting',service_ready:'At site',decision:'Selecting next task',arrived:'Arriving',continue:'At site',ready_return:'Returning',return:'Returning',landing_wait:'Holding',landing:'Landing',turnaround:'Turnaround',charge_wait:'Charge queue',charging:'Charging',ground_closed:'At base',failed:'Unavailable'};
+  const flying = new Set(['takeoff','transit','return','service','ready_service','ready_return','ready_transit','continue','landing_wait','landing','service_ready','decision','arrived']);
   const activeEvents = new Set(['task_completed','inspection_completed','task_interrupted','unit_interrupted','service_interrupted','weather_changed','sortie_started','sortie_finished','departed','arrived','charge_started','charge_completed','aircraft_failed','unit_completed','phase_changed']);
   const state = {replay:null, geography:null, time:0, playing:false, speed:300, lastWall:0, current:null, frameIndex:0, selectedSite:null, view:null, autoFit:true, lastEventSignature:'', loading:false, trails:new Map(), completedBySite:new Map(), aircraftNodes:new Map()};
   const canvas = $('map'), ctx = canvas.getContext('2d');
@@ -33,7 +33,7 @@
     state.loading=on;$('loading-overlay').hidden=!on;$('loading-message').textContent=message;
     $('loading-hint').textContent=state.replay?'Updating the fleet, task and charging trajectories':'Preparing the operating scenario';
     $('run-button').disabled=on;$('run-button').querySelector('span').textContent=on?'Running…':'Run simulation';
-    for (const el of $('config-form').querySelectorAll('select')) el.disabled=on;
+    for (const el of $('config-form').querySelectorAll('select')) el.disabled=on;if(!on)$('recovery_policy').disabled=$('network_id').value==='legacy_24';
   }
   function loadReplay(replay) {
     if (!replay || !Array.isArray(replay.frames) || !replay.frames.length) throw new Error('This run contains no simulation frames.');
@@ -48,27 +48,37 @@
       if(!state.completedBySite.has(id))state.completedBySite.set(id,[]);state.completedBySite.get(id).push(event.t);
     }
     const conf=replay.metadata.config||replay.metadata;
-    for (const key of ['fleet_size','targets_per_sortie','charge_ports','port_input_w','policy','weather','duration_hours']) {
+    $('network_id').value=conf.network_id||'pingtan_96'; updateNetworkOptions(conf.fleet_size);
+    for (const key of ['network_id','fleet_size','targets_per_sortie','charge_ports','port_input_w','policy','weather','duration_hours','recovery_policy']) {
       const el=$(key),value=conf[key];if(value!==undefined && [...el.options].some(o=>o.value===String(value)))el.value=String(value);
     }
     $('timeline').max=limit();$('timeline').disabled=false;$('play-button').disabled=false;$('reset-button').disabled=false;$('download-button').disabled=false;
     $('clock-end').textContent=clock(limit());$('timeline-ticks').replaceChildren(...Array.from({length:5},(_,i)=>{const s=document.createElement('span');s.textContent=clock(limit()*i/4,true);return s;}));
+    $('weather-credit').hidden=conf.weather!=='historical';
+    $('map-network-name').textContent=`${replay.bases.length===1?'Single-base':'Three-base'} network`; $('wind-description').textContent=replay.metadata.wind_label; $('wind-scope').textContent=replay.bases.length===1?'regional wind':'regional min–max';
     $('map-site-count').textContent=`${(replay.sites||[]).length} sites`;
-    $('run-status').textContent=(replay.summary?.status==='pass'||replay.summary?.audit_status==='pass')?'Run complete · verified':'Run complete';
+    $('run-status').textContent='Simulation complete';
     $('run-status').className='status-pass';$('connection-text').textContent='Ready';
     $('site-detail').hidden=true;buildFleet();fitMap();renderAll();updatePlayButton();
   }
   function frameAt(t) {
     const frames=state.replay.frames;let low=0,high=frames.length-1;
     while(low<high){const mid=Math.ceil((low+high)/2);if(frames[mid].t<=t)low=mid;else high=mid-1;}
-    state.frameIndex=low;const a=frames[low],b=frames[Math.min(low+1,frames.length-1)];
-    const u=b.t>a.t?clamp((t-a.t)/(b.t-a.t),0,1):0;
-    const next=new Map((b.aircraft||[]).map(x=>[aircraftId(x),x]));
-    return {...a,aircraft:(a.aircraft||[]).map(x=>{
-      const y=next.get(aircraftId(x))||x;
-      // The server samples actual engine positions. Interpolation only smooths playback.
-      return {...x,lon:finite(x.lon)+(finite(y.lon)-finite(x.lon))*u,lat:finite(x.lat)+(finite(y.lat)-finite(x.lat))*u,energy_wh:finite(x.energy_wh)+(finite(y.energy_wh)-finite(x.energy_wh))*u,heading:Math.atan2(finite(y.lon)-finite(x.lon),finite(y.lat)-finite(x.lat))};
-    })};
+    state.frameIndex=low;const a=frames[low]; let consumed=0;
+    const aircraft=state.replay.aircraft.map(profile=>{
+      const rows=state.replay.tracks[profile.id];let lo=0,hi=rows.length-1;
+      while(lo<hi){const mid=Math.ceil((lo+hi)/2);if(rows[mid].t<=t)lo=mid;else hi=mid-1;}
+      const row=rows[lo],elapsed=clamp(t-row.t,0,row.end_t-row.t),f=row.end_t>row.t?elapsed/(row.end_t-row.t):0;
+      consumed+=row.consumed_wh_start+elapsed*row.power_w/3600;
+      return {...row,id:profile.id,lon:row.lon+f*(row.end_lon-row.lon),lat:row.lat+f*(row.end_lat-row.lat),
+        energy_wh:row.energy_wh+f*(row.end_energy_wh-row.energy_wh),heading:Math.atan2(row.end_lon-row.lon,row.end_lat-row.lat)};
+    });
+    function information(history){const stamps=new Map(state.replay.sites.map(s=>[s.task_id||s.id,-s.initial_age_s]));let count=0;
+      for(const event of history){if(event.t>t)break;stamps.set(event.task_id,Math.max(stamps.get(event.task_id),event.stamp));count++;}
+      return {age:[...stamps.values()].reduce((sum,stamp)=>sum+t-stamp,0)/stamps.size/3600,count};}
+    const c=information(state.replay.collection_history),p=information(state.replay.platform_history);
+    return {...a,aircraft,completed:c.count,delivered:p.count,age_h:c.age,platform_age_h:p.age,energy_wh:consumed,
+      charging:aircraft.filter(x=>x.phase==='charging').length,queue:aircraft.filter(x=>x.phase==='charge_wait').length};
   }
   function seek(t) {if(!state.replay)return;state.time=clamp(finite(t),0,limit());renderAll();}
   function play() {if(!state.replay)return;if(state.time>=limit())state.time=0;state.playing=true;state.lastWall=performance.now();updatePlayButton();}
@@ -124,23 +134,22 @@
         const major=/motorway|trunk|primary|secondary/.test(type);ctx.lineWidth=major?3.4:1.5;ctx.strokeStyle=major?'#d9c5a3':'#d1d5cc';ctx.stroke();ctx.lineWidth=major?2:0.7;ctx.strokeStyle=major?'#faf2dc':'#fafaf5';ctx.stroke();
       }
     }
+    if(state.replay?.bases.length>1){
+      for(const f of features.filter(f=>f.properties?.layer==='windzone')){ctx.beginPath();geoPath(f.geometry);ctx.fillStyle='#087f830b';ctx.fill('evenodd');ctx.strokeStyle='#4b778a70';ctx.lineWidth=1;ctx.setLineDash([4,4]);ctx.stroke();ctx.setLineDash([]);}
+      for(const wind of state.current?.winds||[]){const[x,y]=screen(wind.lon,wind.lat),speed=Math.hypot(wind.east,wind.north);ctx.save();ctx.translate(x,y);ctx.rotate(Math.atan2(wind.east,wind.north));ctx.strokeStyle=speed>10?'#a6522c':'#336d8e';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(0,12);ctx.lineTo(0,-12);ctx.lineTo(-4,-6);ctx.moveTo(0,-12);ctx.lineTo(4,-6);ctx.stroke();ctx.restore();ctx.font='600 10px system-ui';ctx.fillStyle='#35596a';ctx.textAlign='left';ctx.fillText(`${wind.id} ${speed.toFixed(1)} m/s`,x+8,y+18);}
+    }
     // A geographic name is a map label, independent of scenario facility assignments.
     if(state.replay?.metadata?.map_label!==false) {
       ctx.font='600 13px system-ui, sans-serif';ctx.fillStyle='#708e9290';ctx.textAlign='left';ctx.fillText('PINGTAN ISLAND',21,height-102);
     }
   }
   function drawTracks() {
-    const from=state.time-900;
-    for(const [id,trail] of state.trails) {
-      const color=palette[(state.replay.aircraft||[]).findIndex(a=>aircraftId(a)===id)%palette.length]||palette[0];
-      let low=0,high=trail.length;while(low<high){const mid=(low+high)>>1;if(trail[mid].t<from)low=mid+1;else high=mid;}
-      ctx.beginPath();let started=false;
-      for(let j=Math.max(0,low-1);j<trail.length&&trail[j].t<=state.time;j++) {
-        const point=trail[j];if(!flying.has(point.phase)){started=false;continue;}
-        const p=screen(point.lon,point.lat);if(started)ctx.lineTo(...p);else{ctx.moveTo(...p);started=true;}
-      }
-      const now=state.current?.aircraft.find(a=>aircraftId(a)===id);if(started&&now&&flying.has(now.phase))ctx.lineTo(...screen(now.lon,now.lat));
-      ctx.strokeStyle=color+'80';ctx.lineWidth=2;ctx.lineCap='round';ctx.lineJoin='round';ctx.stroke();
+    const from=state.time-1200;
+    for(const [id,rows] of Object.entries(state.replay.tracks)) {
+      const color=palette[state.replay.aircraft.findIndex(a=>a.id===id)%palette.length];ctx.beginPath();
+      for(const r of rows){if(r.t>state.time)break;if(r.end_t<from||!['transit','return'].includes(r.phase)||r.end_t<=r.t)continue;
+        const f=clamp((state.time-r.t)/(r.end_t-r.t),0,1);ctx.moveTo(...screen(r.lon,r.lat));ctx.lineTo(...screen(r.lon+f*(r.end_lon-r.lon),r.lat+f*(r.end_lat-r.lat)));}
+      ctx.strokeStyle=color+'99';ctx.lineWidth=2;ctx.stroke();
     }
   }
   function lastSiteCompletion(id) {const times=state.completedBySite.get(normalizedSiteId(id))||[];let result=null;for(const t of times){if(t>state.time)break;result=t;}return result;}
@@ -153,7 +162,7 @@
       ctx.beginPath();ctx.arc(x,y,selected?5.5:4,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();ctx.strokeStyle='#fff';ctx.lineWidth=1.5;ctx.stroke();
       const label=String(site.id).match(/(\d+)$/)?.[1]||String(site.id);ctx.font=`${selected?'700':'600'} 9px system-ui,sans-serif`;ctx.textAlign='left';ctx.lineWidth=3;ctx.strokeStyle='#ffffffdd';ctx.strokeText(label,x+7,y-5);ctx.fillStyle='#49606a';ctx.fillText(label,x+7,y-5);
     }
-    const b=state.replay.base;if(b){const[x,y]=screen(b.lon,b.lat);ctx.save();ctx.translate(x,y);ctx.fillStyle='#fff';ctx.strokeStyle='#152b3c';ctx.lineWidth=1.3;ctx.beginPath();ctx.roundRect(-8,-8,16,16,3);ctx.fill();ctx.stroke();ctx.fillStyle='#152b3c';ctx.fillRect(-5,-4,10,8);ctx.fillStyle='#fff';ctx.fillRect(-1.5,-1,3,5);ctx.restore();ctx.font='700 10px system-ui,sans-serif';ctx.textAlign='left';ctx.lineWidth=4;ctx.strokeStyle='#ffffffed';ctx.strokeText('BASE',x+12,y+4);ctx.fillStyle='#203c4d';ctx.fillText('BASE',x+12,y+4);}
+    for(const b of state.replay.bases){const[x,y]=screen(b.lon,b.lat);ctx.save();ctx.translate(x,y);ctx.fillStyle='#fff';ctx.strokeStyle='#152b3c';ctx.lineWidth=1.3;ctx.beginPath();ctx.roundRect(-8,-8,16,16,3);ctx.fill();ctx.stroke();ctx.fillStyle='#152b3c';ctx.fillRect(-5,-4,10,8);ctx.fillStyle='#fff';ctx.fillRect(-1.5,-1,3,5);ctx.restore();ctx.font='700 10px system-ui,sans-serif';ctx.textAlign='left';ctx.lineWidth=4;ctx.strokeStyle='#ffffffed';ctx.strokeText(b.id,x+12,y+4);ctx.fillStyle='#203c4d';ctx.fillText(b.id,x+12,y+4);}
   }
   function drawAircraft() {
     const aircraft=state.current?.aircraft||[];const atBase=new Map();
@@ -173,7 +182,7 @@
   function drawMap() {needsDraw=false;if(!width||!height)return;ctx.clearRect(0,0,width,height);if(!state.view||!state.replay){ctx.fillStyle='#dbe9ed';ctx.fillRect(0,0,width,height);return;}drawGeography();drawTracks();drawSites();drawAircraft();drawCompass();const metersPerPixel=6378137*Math.cos((state.replay.base?.lat||25.49)*Math.PI/180)/state.view.scale;const sizes=[50,100,200,500,1000,2000,5000,10000];const m=sizes.reduce((best,n)=>Math.abs(n/metersPerPixel-65)<Math.abs(best/metersPerPixel-65)?n:best,1000);$('scale-label').textContent=m>=1000?`${m/1000} km`:`${m} m`;$('scale-bar').style.width=`${m/metersPerPixel}px`;$('scale-label').style.width=`${m/metersPerPixel}px`;}
   function buildFleet() {
     const container=$('fleet-list');container.replaceChildren();state.aircraftNodes.clear();
-    (state.replay.aircraft||[]).forEach((a,i)=>{const id=aircraftId(a),div=document.createElement('div');div.className='aircraft-card';div.style.setProperty('--aircraft-color',palette[i%palette.length]);div.innerHTML=`<div class="aircraft-top"><span class="aircraft-name"><i></i>${escape(id)}</span><span class="phase">Available</span></div><div class="aircraft-spec">${escape((a.capabilities||[]).join(' + ').toUpperCase() || a.profile_id || 'Inspection UAV')}</div><div class="battery-row"><span class="battery-bar"><i></i></span><span class="battery-value">—</span></div><div class="aircraft-task">At shared base</div>`;container.append(div);state.aircraftNodes.set(id,{el:div,profile:a});});
+    (state.replay.aircraft||[]).forEach((a,i)=>{const id=aircraftId(a),div=document.createElement('div');div.className='aircraft-card';div.style.setProperty('--aircraft-color',palette[i%palette.length]);div.innerHTML=`<div class="aircraft-top"><span class="aircraft-name"><i></i>${escape(id)}</span><span class="phase">Available</span></div><div class="aircraft-spec">${escape((a.capabilities||[]).join(' + ').toUpperCase() || a.profile_id || 'Inspection UAV')}</div><div class="battery-row"><span class="battery-bar"><i></i></span><span class="battery-value">—</span></div><div class="aircraft-task">At base</div>`;container.append(div);state.aircraftNodes.set(id,{el:div,profile:a});});
   }
   function updateFleet() {
     let count=0;
@@ -182,7 +191,7 @@
       const phase=n.el.querySelector('.phase');phase.className=`phase ${a.phase}`;phase.textContent=phases[a.phase]||String(a.phase).replaceAll('_',' ');
       const capacity=finite(n.profile.capacity_wh||n.profile.battery_usable_wh,1),energy=finite(a.energy_wh);n.el.querySelector('.battery-bar>i').style.width=`${clamp(100*energy/capacity,0,100)}%`;
       n.el.querySelector('.battery-value').textContent=`${Math.round(energy)} Wh`;
-      const task=a.task_id||a.site_id;n.el.querySelector('.aircraft-task').textContent=task?`Task · ${String(task).replace('-PER', '')}`:(flying.has(a.phase)?'Recovering to shared base':'At shared base');
+      const task=a.task_id||a.site_id;n.el.querySelector('.aircraft-task').textContent=task?`Task · ${String(task).replace('-PER', '')}`:(flying.has(a.phase)?'Recovering':`At ${a.base_id||'base'}`);
     }
     $('fleet-active').textContent=`${count} airborne`;
   }
@@ -216,21 +225,25 @@
   }
   function drawChart() {
     if(!chartWidth||!chartHeight)return;const c=chartCtx,w=chartWidth,h=chartHeight;c.clearRect(0,0,w,h);
-    if(!state.replay)return;const series=state.replay.frames,values=series.map(f=>finite(f.age_h));const min=0,max=Math.max(1,Math.ceil(Math.max(...values)*1.05));const left=24,right=w-5,top=5,bottom=h-18;
+    if(!state.replay)return;const series=state.replay.frames,values=series.flatMap(f=>[finite(f.age_h),finite(f.platform_age_h)]);const min=0,max=Math.max(1,Math.ceil(Math.max(...values)*1.05));const left=24,right=w-5,top=5,bottom=h-18;
     c.font='8px system-ui,sans-serif';c.lineWidth=1;c.textAlign='right';
     for(const fraction of [0,.5,1]){const y=bottom-(bottom-top)*fraction;c.beginPath();c.moveTo(left,y);c.lineTo(right,y);c.strokeStyle='#e5ecef';c.stroke();c.fillStyle='#96a3ad';c.fillText((min+(max-min)*fraction).toFixed(max<4?1:0),left-5,y+3);}
-    const stride=Math.max(1,Math.floor(series.length/500));let first=true;c.beginPath();
-    for(let i=0;i<series.length&&series[i].t<=state.time;i+=stride){const f=series[i],x=left+(right-left)*f.t/limit(),y=bottom-(bottom-top)*finite(f.age_h)/max;first?c.moveTo(x,y):c.lineTo(x,y);first=false;}
-    const x=left+(right-left)*state.time/limit(),y=bottom-(bottom-top)*finite(state.current?.age_h)/max;if(!first)c.lineTo(x,y);c.strokeStyle='#087f83';c.lineWidth=1.7;c.stroke();if(!first){c.beginPath();c.arc(x,y,2.5,0,Math.PI*2);c.fillStyle='#087f83';c.fill();}
+    const stride=Math.max(1,Math.floor(series.length/500));
+    for(const [field,color] of [['platform_age_h','#a9582c'],['age_h','#087f83']]){let first=true;c.beginPath();
+      for(let i=0;i<series.length&&series[i].t<=state.time;i+=stride){const f=series[i],x=left+(right-left)*f.t/limit(),y=bottom-(bottom-top)*finite(f[field])/max;first?c.moveTo(x,y):c.lineTo(x,y);first=false;}
+      if(!first)c.lineTo(left+(right-left)*state.time/limit(),bottom-(bottom-top)*finite(state.current?.[field])/max);c.strokeStyle=color;c.lineWidth=1.7;c.stroke();}
     c.fillStyle='#96a3ad';c.textAlign='left';c.fillText('0 h',left,h-2);c.textAlign='right';c.fillText(`${(limit()/3600).toFixed(0)} h`,right,h-2);
   }
   function updatePanels() {
     const f=state.current;if(!f)return;
     $('metric-completed').textContent=Math.round(finite(f.completed)).toLocaleString();
     $('metric-age').textContent=Number.isFinite(Number(f.age_h))?Number(f.age_h).toFixed(2):'—';
+    $('metric-platform-age').textContent=Number(f.platform_age_h).toFixed(2);
+    $('cross-base-count').hidden=state.replay.bases.length===1;
+    $('cross-base-count').textContent=`Cross-base landings: ${state.replay.events.filter(e=>e.cross_base&&e.t<=state.time).length}`;
     $('metric-energy').textContent=(finite(f.energy_wh)/1000).toFixed(2);
     const count=x=>Array.isArray(x)?x.length:finite(x);$('metric-charging').textContent=`${count(f.charging)} / ${count(f.queue)}`;
-    const east=finite(f.wind_east_mps),north=finite(f.wind_north_mps);$('wind-speed').textContent=`${Math.hypot(east,north).toFixed(1)} m/s`;$('wind-arrow').style.transform=`rotate(${Math.atan2(east,north)*180/Math.PI}deg)`;
+    const east=finite(f.wind_east_mps),north=finite(f.wind_north_mps),speeds=(f.winds||[]).map(w=>Math.hypot(w.east,w.north));$('wind-speed').textContent=speeds.length>1?`${Math.min(...speeds).toFixed(1)}–${Math.max(...speeds).toFixed(1)} m/s`:`${Math.hypot(east,north).toFixed(1)} m/s`;$('wind-arrow').style.transform=`rotate(${Math.atan2(east,north)*180/Math.PI}deg)`;
     $('clock-current').textContent=clock(state.time);$('playback-label').textContent=periodLabel();$('timeline').value=state.time;const pct=100*state.time/limit();$('timeline').style.background=`linear-gradient(to right,#087f83 ${pct}%,#d1dee3 ${pct}%)`;
     updateFleet();updateEvents();updateSiteDetail();drawChart();
   }
@@ -240,6 +253,8 @@
     state.lastWall=now;if(needsDraw)drawMap();requestAnimationFrame(tick);
   }
 
+  function updateNetworkOptions(preferred){const single=$('network_id').value==='legacy_24',values=single?[2,4,8]:[6,12,24],old=Number(preferred||$('fleet_size').value);$('fleet_size').replaceChildren(...values.map(v=>{const o=document.createElement('option');o.value=v;o.textContent=`${v} UAVs`;return o;}));$('fleet_size').value=values.includes(old)?old:(single?4:12);$('recovery_policy').disabled=single;if(single)$('recovery_policy').value='HOME';}
+  $('network_id').addEventListener('change',()=>updateNetworkOptions());
   $('play-button').addEventListener('click',()=>state.playing?pause():play());
   $('reset-button').addEventListener('click',()=>{pause();seek(0);});
   $('speed').addEventListener('change',e=>{state.speed=finite(e.target.value,300);});
@@ -254,7 +269,7 @@
   canvas.addEventListener('wheel',e=>{e.preventDefault();const r=canvas.getBoundingClientRect();zoom(Math.exp(-e.deltaY*.0014),e.clientX-r.left,e.clientY-r.top);},{passive:false});
   canvas.addEventListener('keydown',e=>{if(!state.view)return;const v=state.view,step=45/v.scale;let handled=true;if(e.key==='+'||e.key==='=')zoom(1.25);else if(e.key==='-')zoom(.8);else if(e.key==='Home')fitMap();else if(e.key==='ArrowLeft')v.cx-=step;else if(e.key==='ArrowRight')v.cx+=step;else if(e.key==='ArrowUp')v.cy+=step;else if(e.key==='ArrowDown')v.cy-=step;else handled=false;if(handled){e.preventDefault();needsDraw=true;}});
   $('config-form').addEventListener('submit',async e=>{
-    e.preventDefault();pause();$('run-error').hidden=true;const config=Object.fromEntries(new FormData(e.target));for(const key of ['fleet_size','targets_per_sortie','charge_ports','port_input_w','duration_hours'])config[key]=Number(config[key]);
+    e.preventDefault();pause();$('run-error').hidden=true;const config=Object.fromEntries(new FormData(e.target));for(const key of ['fleet_size','targets_per_sortie','charge_ports','port_input_w','duration_hours'])config[key]=Number(config[key]);if(config.network_id==='legacy_24')config.recovery_policy='HOME';
     setLoading(true);try{const replay=await jsonFetch('/api/run',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(config)});loadReplay(replay);$('configuration').classList.remove('open');$('configure-toggle').setAttribute('aria-expanded','false');}
     catch(error){$('run-error').textContent=error.message;$('run-error').hidden=false;$('connection-text').textContent='Run failed';}
     finally{setLoading(false);}
